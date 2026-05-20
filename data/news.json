@@ -2,6 +2,7 @@ json
 {
   "articles": [],
   "liPosts": [],
+  "bookmarks": {},
   "categoryOverrides": {},
   "typeOverrides": {},
   "lastUpdatedAt": "",
