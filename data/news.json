@@ -835,6 +835,71 @@
       "createdAt": "2026-05-20T07:45:42.957Z"
     }
   ],
+  "bookmarks": {
+    "https://www.broadbandtvnews.com/2026/05/19/omdia-ctv-ad-market-to-reach-81bn-by-2030/": {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "Omdia: CTV ad market to reach $81bn by 2030",
+      "url": "https://www.broadbandtvnews.com/2026/05/19/omdia-ctv-ad-market-to-reach-81bn-by-2030/",
+      "snippet": "Global connected TV advertising revenue will almost double from $44 billion (€40.5 billion) in 2025 to $81 billion (€74.5 billion) by 2030, according to new research from Omdia. The analyst […]",
+      "source": "Broadband TV News",
+      "publishedAt": "2026-05-19 11:43:50",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Broadband / TV",
+      "createdAt": "2026-05-20T06:55:10.769Z",
+      "updatedAt": "2026-05-20T06:55:10.769Z",
+      "bookmarkedAt": "2026-05-20T07:46:01.030Z"
+    },
+    "https://www.broadbandtvnews.com/2026/05/19/delta-and-harmonic-target-docsis-4-0-amplifier-automation/": {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "DELTA and Harmonic target DOCSIS 4.0 amplifier automation",
+      "url": "https://www.broadbandtvnews.com/2026/05/19/delta-and-harmonic-target-docsis-4-0-amplifier-automation/",
+      "snippet": "DELTA Electronics and Harmonic have announced a collaboration to enable remote control and automation of DOCSIS 4.0 amplifiers in HFC networks. The integration brings DELTA’s FOSTRA protocol into Harmonic’s Amply […]",
+      "source": "Broadband TV News",
+      "publishedAt": "2026-05-19 09:27:51",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Broadband / TV",
+      "createdAt": "2026-05-20T06:55:10.769Z",
+      "updatedAt": "2026-05-20T06:55:10.769Z",
+      "bookmarkedAt": "2026-05-20T07:46:08.596Z"
+    },
+    "https://www.advanced-television.com/2026/05/20/roku-launches-creators-in-us/": {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "Roku launches Creators in US",
+      "url": "https://www.advanced-television.com/2026/05/20/roku-launches-creators-in-us/",
+      "snippet": "Roku has announced the launch of Creators, a new entertainment destination where Roku users can discover and stream creator content on the platform in the US. “With the launch of our new Creators destination, we’re making it effortless to enjoy creator content the way it deserves to be watched: on the big screen, in stunning […]",
+      "source": "Advanced Television",
+      "publishedAt": "2026-05-19 23:53:50",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Television / Broadband",
+      "createdAt": "2026-05-20T08:33:07.867Z",
+      "updatedAt": "2026-05-20T08:33:07.867Z",
+      "bookmarkedAt": "2026-05-20T08:33:15.647Z"
+    },
+    "https://www.linkedin.com/posts/humax-networks_hne2306-plume-opensync-activity-7458367070875934720-EoxB?utm_source=share&utm_medium=member_desktop&rcm=ACoAAC_5zesBEXHEWkiR-6UF1FKpq4jzBRbtB_A": {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cubGlu",
+      "title": "HNE2306 Wi-Fi 7 Router & Extender OpenSync Certification",
+      "url": "https://www.linkedin.com/posts/humax-networks_hne2306-plume-opensync-activity-7458367070875934720-EoxB?utm_source=share&utm_medium=member_desktop&rcm=ACoAAC_5zesBEXHEWkiR-6UF1FKpq4jzBRbtB_A",
+      "snippet": "HUMAX Networks announced that its Wi-Fi 7 router & extender, hashtag#HNE2306, has successfully achieved Plume OpenSync certification, validating its readiness for commercial deployment in Plume-based environments.",
+      "source": "LinkedIn",
+      "publishedAt": "2026-05-13T00:00:00.000Z",
+      "type": "linkedin",
+      "companies": [
+        "Humax Networks"
+      ],
+      "keywords": [],
+      "category": "LinkedIn",
+      "createdAt": "2026-05-20T07:45:42.957Z",
+      "updatedAt": "2026-05-20T07:45:42.957Z",
+      "liStorageId": "li_1779263142957_4n02s",
+      "bookmarkedAt": "2026-05-20T08:33:18.669Z"
+    }
+  },
   "categoryOverrides": {
     "https://www.lightreading.com/ai-machine-learning/chinese-telcos-join-the-ai-token-party": "Broadband",
     "https://www.broadbandtvnews.com/2026/05/19/atsc-sbtvd-forum-and-tta-sign-next-generation-broadcasting-mou/": "Video"
@@ -843,7 +908,7 @@
     "https://www.advanced-television.com/2026/05/19/research-digital-transactional-video-returns-to-growth/": "industry",
     "https://www.lightreading.com/finance/big-fiber-secures-250m-led-by-stonepeak-credit-la-caisse": "competitor"
   },
-  "lastUpdatedAt": "2026-05-20T09:09:46.789Z",
+  "lastUpdatedAt": "2026-05-20T09:11:17.354Z",
   "monthStart": "2026-05-01",
   "updatedBy": "bale716"
 }
