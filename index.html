@@ -131,8 +131,8 @@ input,select{font-family:var(--font-sans)}
 /* NOTICE */
 
 /* NEWS GRID */
-.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
-.news-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow-sm);cursor:pointer;transition:box-shadow .15s,border-color .15s,transform .12s;display:flex;flex-direction:column;gap:7px;position:relative;overflow:hidden}
+.news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.news-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;box-shadow:var(--shadow-sm);cursor:pointer;transition:box-shadow .15s,border-color .15s,transform .12s;display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden;min-height:168px;max-height:192px}
 .news-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--border);border-radius:3px 0 0 3px;transition:background .15s}
 .news-card:hover{box-shadow:var(--shadow-md);border-color:var(--accent);transform:translateY(-1px)}
 .news-card:hover::before{background:var(--accent)}
@@ -165,12 +165,12 @@ input,select{font-family:var(--font-sans)}
 .bookmark-btn:hover{color:var(--bookmark-active);transform:scale(1.2)}
 .bookmark-btn.bookmarked{color:var(--bookmark-active)}
 /* Card body */
-.news-card-title{font-size:13px;font-weight:600;color:var(--text-primary);line-height:1.45}
-.news-card-snippet{font-size:12px;color:var(--text-secondary);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.news-card-title{font-size:13px;font-weight:600;color:var(--text-primary);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.news-card-snippet{font-size:11px;color:var(--text-secondary);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .news-card-footer{display:flex;align-items:center;gap:7px;margin-top:2px}
-.news-source{font-size:11px;font-weight:600;color:var(--text-muted);font-family:var(--font-mono)}
+.news-source{font-size:10px;font-weight:600;color:var(--text-muted);font-family:var(--font-mono)}
 .news-dot{color:var(--border);font-size:10px}
-.news-date{font-size:11px;color:var(--text-muted);font-family:var(--font-mono)}
+.news-date{font-size:10px;color:var(--text-muted);font-family:var(--font-mono)}
 /* Skeleton */
 .skeleton-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;min-height:130px;animation:pulse 1.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
@@ -252,8 +252,8 @@ input,select{font-family:var(--font-sans)}
 .apikey-clear:hover{border-color:var(--danger);color:var(--danger)}
 .apikey-hint{font-size:11px;margin-top:8px;color:var(--text-muted);min-height:16px}
 /* RESPONSIVE */
-@media(max-width:1024px){.sidebar{width:210px}.news-grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}}
-@media(max-width:768px){.sidebar{display:none}.main{padding:14px}.kpi-grid{grid-template-columns:repeat(3,1fr)}.news-grid{grid-template-columns:1fr}.header-title{font-size:12px}.header-window{display:none}}
+@media(max-width:1200px){.sidebar{width:210px}.news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:768px){.sidebar{display:none}.main{padding:12px}.kpi-grid{grid-template-columns:repeat(3,1fr)}.news-grid{grid-template-columns:1fr}.news-card{max-height:none}.header-title{font-size:12px}.header-window{display:none}}
 </style>
 </head>
 <body>
@@ -297,6 +297,20 @@ input,select{font-family:var(--font-sans)}
     </div>
 
     <div class="sidebar-section">
+      <div class="sidebar-label">Product</div>
+      <div class="sidebar-tags">
+        <button class="tag-btn" onclick="setProductFilter('Video',this)">
+          <span class="tag-dot" style="background:#b84c00"></span>Video<span class="cnt" id="cnt-video">0</span>
+        </button>
+        <button class="tag-btn" onclick="setProductFilter('Broadband',this)">
+          <span class="tag-dot" style="background:#0f6b4c"></span>Broadband<span class="cnt" id="cnt-broadband">0</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
       <div class="sidebar-label">Category</div>
       <nav class="sidebar-nav">
         <button class="nav-btn active" onclick="setFilter('all',this)">
@@ -311,7 +325,6 @@ input,select{font-family:var(--font-sans)}
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           Industry <span class="cnt" id="cnt-industry">0</span>
         </button>
-
         <button class="nav-btn" onclick="setFilter('linkedin',this)">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           LinkedIn <span class="cnt" id="cnt-linkedin">0</span>
@@ -320,20 +333,6 @@ input,select{font-family:var(--font-sans)}
           ★ Bookmarks <span class="cnt" id="cnt-bookmarks">0</span>
         </button>
       </nav>
-    </div>
-
-    <div class="sidebar-divider"></div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Product</div>
-      <div class="sidebar-tags">
-        <button class="tag-btn" onclick="setProductFilter('Video',this)">
-          <span class="tag-dot" style="background:#b84c00"></span>Video<span class="cnt" id="cnt-video">0</span>
-        </button>
-        <button class="tag-btn" onclick="setProductFilter('Broadband',this)">
-          <span class="tag-dot" style="background:#0f6b4c"></span>Broadband<span class="cnt" id="cnt-broadband">0</span>
-        </button>
-      </div>
     </div>
 
     <div class="sidebar-divider"></div>
@@ -465,6 +464,34 @@ input,select{font-family:var(--font-sans)}
     <div class="tab-panel" id="tab-status">
       <div class="section-header"><span class="section-title">Data Source Status</span></div>
 
+      <!-- GitHub Sync 설정 카드 -->
+      <div class="apikey-card" style="margin-bottom:12px">
+        <div class="apikey-header">
+          <div>
+            <div class="apikey-title">🔄 GitHub Sync — Shared News Storage</div>
+            <div class="apikey-desc">
+              페이지를 열면 <code>bale716/KAON_NEWS</code>의 <code>data/news.json</code>에서 팀 공유 뉴스를 자동으로 불러옵니다.<br>
+              <strong>읽기</strong>: 별도 설정 없이 자동 동작 &nbsp;|&nbsp;
+              <strong>쓰기(Refresh 담당자)</strong>: PAT 입력 시 Refresh 후 자동 Push
+              (<a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">PAT 발급 →</a> Contents: Read &amp; Write)
+            </div>
+          </div>
+          <span class="apikey-status unset" id="ghSyncStatus">○ Read only (auto)</span>
+        </div>
+        <div class="apikey-row">
+          <input type="password" id="ghPat" class="apikey-input" placeholder="Refresh 담당자만 입력: Personal Access Token">
+          <button class="apikey-toggle" onclick="toggleGhPatVisibility()" title="Show/hide PAT">👁</button>
+          <button class="apikey-save"  onclick="saveGhConfig()">Save</button>
+          <button class="apikey-clear" onclick="clearGhConfig()">Clear</button>
+        </div>
+        <div class="apikey-row" style="margin-top:8px">
+          <button class="apikey-save" id="ghPullBtn" onclick="manualPullFromGitHub()" style="background:var(--success)">↓ Pull now</button>
+          <button class="apikey-save" id="ghPushBtn" onclick="manualPushToGitHub()"  style="background:var(--tag-competitor)">↑ Push now</button>
+          <span style="font-size:11px;color:var(--text-muted);margin-left:4px">Pull: 최신 공유 뉴스 수동 로드 &nbsp;|&nbsp; Push: 현재 뉴스 즉시 공유</span>
+        </div>
+        <div class="apikey-hint" id="ghHint"></div>
+      </div>
+
       <!-- RSS2JSON API Key 설정 카드 -->
       <div class="apikey-card" id="apikeyCard">
         <div class="apikey-header">
@@ -505,7 +532,7 @@ input,select{font-family:var(--font-sans)}
 const RSS2JSON_API_KEY        = "";   // Fallback: hardcode key here, or set via UI below
 const RSS2JSON_KEY_STORAGE    = "kaon_rss2json_api_key"; // UI에서 저장한 API Key
 const MAX_ARTICLES            = 600;
-const CARDS_PER_PAGE          = 30;
+const CARDS_PER_PAGE          = 12;  // 3 columns × 4 rows
 const NEWS_RETENTION_MODE     = "current_month";
 const REFRESH_WINDOW_HOURS    = 24;
 const ARTICLE_STORAGE_KEY     = "kaon_monthly_news_articles";
@@ -513,6 +540,15 @@ const BOOKMARK_STORAGE_KEY    = "kaon_news_bookmarks";
 const LAST_UPDATED_STORAGE_KEY = "kaon_news_last_updated";
 const LI_POSTS_STORAGE_KEY    = "kaon_li_manual_posts"; // UI에서 저장된 LinkedIn 포스트
 const CAT_OVERRIDE_STORAGE_KEY  = "kaon_category_overrides";  // 수동 Video/Broadband 오버라이드
+// GitHub Sync 설정 (localStorage)
+// ── GitHub Sync 설정 ──────────────────────────────────────────
+// Owner와 Repo는 배포 레포로 고정 — 팀원 설정 불필요
+// PAT만 Refresh 담당자가 Source Status 탭에서 입력
+const GH_OWNER       = "bale716";        // GitHub 사용자명
+const GH_REPO        = "KAON_NEWS";      // 레포 이름
+const GH_PAT_KEY     = "kaon_gh_pat";   // PAT는 localStorage에만 저장
+const GH_DATA_PATH   = "data/news.json";
+const GH_MAX_SYNC_ARTICLES = 400;
 const TYPE_OVERRIDE_STORAGE_KEY = "kaon_type_overrides";      // 수동 Competitor/Industry 오버라이드
 
 /* ==============================================================
@@ -1043,9 +1079,10 @@ function normalizeArticle(item, meta) {
   const title   = item.title || "";
   const url     = item.link  || item.url || "";
   const raw     = item.description || item.content || item.summary || "";
-  const snippet = raw.replace(/<[^>]*>/g, "").trim().substring(0, 220);
+  const snippet = raw.replace(/<[^>]*>/g, "").trim().substring(0, 400);
   const pubDate = item.pubDate || item.published || item.isoDate || item.date || "";
-  const fullTxt = `${title} ${snippet}`;
+  const author  = item.author || item.creator || "";
+  const fullTxt = `${title} ${snippet} ${author}`;
   const detectedCo = detectCompanyTags(fullTxt);
   const companies  = [...new Set([...(meta.companies || []), ...detectedCo])];
   const keywords   = meta.keywords ? [...meta.keywords] : [];
@@ -1106,16 +1143,34 @@ async function fetchGoogleNews(queryObj, mode) {
    순서: ① Industry Media (병렬) → ② Competitor RSS (병렬)
          → ③ Google News (순차, 300ms 간격) — 429 방지
    ============================================================== */
-const GNEWS_DELAY_MS = 300; // GNews 요청 간 딜레이 (ms)
+// GNews 요청 간 기본 딜레이 (ms) — rss2json 무료 분당 60회 기준
+// 22개 쿼리 × 1200ms ≒ 26초, 분당 50회 이내 유지
+const GNEWS_DELAY_MS        = 1200;
+const GNEWS_RETRY_DELAY_MS  = 3000; // 429 발생 시 재시도 대기
+const GNEWS_MAX_RETRY       = 1;    // 최대 1회 재시도
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+async function fetchGoogleNewsWithRetry(qObj, mode, retryLeft) {
+  try {
+    return await fetchGoogleNews(qObj, mode);
+  } catch(e) {
+    const is429 = e.message && e.message.includes("429");
+    if (is429 && retryLeft > 0) {
+      await sleep(GNEWS_RETRY_DELAY_MS);
+      return fetchGoogleNewsWithRetry(qObj, mode, retryLeft - 1);
+    }
+    throw e;
+  }
+}
+
 async function fetchGNewsSequential(queries, mode) {
-  // GNews를 순차적으로 호출해 rss2json 429 rate limit 방지
+  // GNews 순차 호출 + 429 자동 재시도
   const results = [];
   for (const qObj of queries) {
     try {
-      const arts = await fetchGoogleNews(qObj, mode);
+      const arts = await fetchGoogleNewsWithRetry(qObj, mode, GNEWS_MAX_RETRY);
+      // 429 숨김 처리는 renderSourceStatus에서 수행 — 여기선 ok만 기록
       sourceStatuses.push({ name: `GNews: "${qObj.query}"`, type: "Google News", status: "ok", count: arts.length, error: "" });
       results.push(...arts);
     } catch(e) {
@@ -1130,7 +1185,20 @@ async function fetchInitialCurrentMonthNews() {
   setRefreshState(true);
   sourceStatuses = [];
 
-  // ① Industry Media — 병렬 (우선순위 최상)
+  // ① Competitor GNews 먼저 순차 실행 — companies 태그 확보 최우선
+  //    Industry Media 병렬 요청이 rss2json 쿼터를 소진하기 전에 처리
+  const competitorQueries = googleNewsQueries.filter(q => q.enabled && q.type === "competitor");
+  const industryQueries   = googleNewsQueries.filter(q => q.enabled && q.type !== "competitor");
+
+  const competitorGNews = await fetchGNewsSequential(competitorQueries, "initial");
+
+  // 중간 반영 — Competitor 기사 먼저 화면에 표시
+  const stored0 = loadStoredArticles();
+  allArticles   = mergeStoredAndFetchedArticles(stored0, competitorGNews);
+  saveStoredArticles(allArticles);
+  applyFilters(); renderSummaryCards(); buildSidebarFilters();
+
+  // ② Industry Media + Competitor RSS — 병렬
   const mediaTasks = industrySources.filter(s => s.enabled && s.rssUrl).map(src => {
     const meta = { source: src.name, type: "media", category: src.category, companies: [], keywords: [] };
     return fetchRssFeed(src, meta)
@@ -1142,8 +1210,7 @@ async function fetchInitialCurrentMonthNews() {
       .catch(e => { sourceStatuses.push({ name: src.name, type: "Industry Media", status: "error", count: 0, error: e.message }); return []; });
   });
 
-  // ② Competitor RSS — 병렬
-  const competitorTasks = competitorSources.filter(s => s.enabled && s.rssUrl).map(src => {
+  const competitorRssTasks = competitorSources.filter(s => s.enabled && s.rssUrl).map(src => {
     const meta = { source: src.company, type: "competitor", companies: [src.company], keywords: [], category: "Official Website" };
     return fetchRssFeed(src, meta)
       .then(arts => {
@@ -1154,24 +1221,20 @@ async function fetchInitialCurrentMonthNews() {
       .catch(e => { sourceStatuses.push({ name: src.company + " RSS", type: "Competitor RSS", status: "error", count: 0, error: e.message }); return []; });
   });
 
-  // Industry Media + Competitor RSS 먼저 완료
-  const [mediaResults, competitorResults] = await Promise.all([
+  const [mediaResults, competitorRssResults] = await Promise.all([
     Promise.all(mediaTasks),
-    Promise.all(competitorTasks)
+    Promise.all(competitorRssTasks)
   ]);
-  const priorityFetched = [...mediaResults.flat(), ...competitorResults.flat()];
+  const rssArticles = [...mediaResults.flat(), ...competitorRssResults.flat()];
 
-  // 우선 결과를 화면에 먼저 반영
+  // 중간 반영
   const liArts = getLinkedInArticles().filter(a => !a.publishedAt || isWithinCurrentMonthToDate(a.publishedAt));
-  const stored = loadStoredArticles();
-  allArticles  = mergeStoredAndFetchedArticles(stored, [...priorityFetched, ...liArts]);
+  allArticles  = mergeStoredAndFetchedArticles(allArticles, [...rssArticles, ...liArts]);
   saveStoredArticles(allArticles);
   applyFilters(); renderSummaryCards(); buildSidebarFilters();
 
-  // ③ Google News — 순차 (딜레이 포함, 429 방지)
-  const gnewsFetched = await fetchGNewsSequential(
-    googleNewsQueries.filter(q => q.enabled), "initial"
-  );
+  // ③ Industry GNews — 순차
+  const gnewsFetched = await fetchGNewsSequential(industryQueries, "initial");
 
   // LinkedIn manual posts
   if (manualLinkedInPosts.length > 0) {
@@ -1224,10 +1287,13 @@ async function refreshLast24HourNews() {
   ]);
   const priorityFetched = [...mediaResults.flat(), ...competitorResults.flat()];
 
-  // ③ Google News — 순차 (딜레이 포함)
-  const gnewsFetched = await fetchGNewsSequential(
-    googleNewsQueries.filter(q => q.enabled), "refresh"
-  );
+  // ③ Google News — Competitor 먼저, Industry 다음
+  const cQ = googleNewsQueries.filter(q => q.enabled && q.type === "competitor");
+  const iQ = googleNewsQueries.filter(q => q.enabled && q.type !== "competitor");
+  const gnewsFetched = [
+    ...await fetchGNewsSequential(cQ, "refresh"),
+    ...await fetchGNewsSequential(iQ, "refresh")
+  ];
 
   const liArts = getLinkedInArticles().filter(a => !a.publishedAt || isWithinCurrentMonthToDate(a.publishedAt));
   if (manualLinkedInPosts.length > 0) {
@@ -1422,8 +1488,8 @@ function buildLiCardHTML(a, bm) {
   <div class="news-card${noLink}" ${onclick}>
     <div class="news-card-top">
       <div class="news-card-badges">
-        <span class="tag tag-type-linkedin">LinkedIn</span>
         ${a.category && a.category !== "LinkedIn" ? `<span class="cat-badge cat-broadband" style="color:var(--tag-linkedin);background:rgba(10,102,194,.08);border-color:rgba(10,102,194,.25)">${escHtml(a.category)}</span>` : ""}
+        <span class="tag tag-type-linkedin">LinkedIn</span>
       </div>
       <button class="${bmClass}" title="${bmState?'Remove bookmark':'Bookmark'}" onclick="toggleBookmark('${aid}',event)">${bmIcon}</button>
     </div>
@@ -1499,6 +1565,201 @@ function toggleApiKeyVisibility() {
   input.type = input.type === "password" ? "text" : "password";
 }
 
+/* ==============================================================
+   GitHub Sync — data/news.json을 공용 저장소로 사용
+   Read: raw.githubusercontent.com (인증 불필요)
+   Write: GitHub Contents API (Fine-grained PAT 필요)
+   ============================================================== */
+function getGhConfig() {
+  return {
+    owner: GH_OWNER,
+    repo:  GH_REPO,
+    pat:   localStorage.getItem(GH_PAT_KEY) || ""
+  };
+}
+
+function getRawUrl(owner, repo) {
+  return `https://raw.githubusercontent.com/${owner}/${repo}/main/${GH_DATA_PATH}`;
+}
+
+function getApiUrl(owner, repo) {
+  return `https://api.github.com/repos/${owner}/${repo}/contents/${GH_DATA_PATH}`;
+}
+
+/** GitHub에서 공유 데이터 로드 (인증 불필요) */
+async function loadFromGitHub() {
+  const { owner, repo } = getGhConfig();
+  if (!owner || !repo) return null;
+  try {
+    const res = await fetch(getRawUrl(owner, repo) + "?t=" + Date.now());
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data;
+  } catch(e) {
+    console.warn("GitHub load failed:", e.message);
+    return null;
+  }
+}
+
+/** GitHub에 공유 데이터 저장 (PAT 필요) */
+async function pushToGitHub(articles, liPostsArr) {
+  const { owner, repo, pat } = getGhConfig();
+  if (!owner || !repo || !pat) return { ok: false, reason: "not-configured" };
+
+  const apiUrl = getApiUrl(owner, repo);
+  const payload = {
+    articles:          articles.slice(0, GH_MAX_SYNC_ARTICLES),
+    liPosts:           liPostsArr || [],
+    categoryOverrides: loadCategoryOverrides(),  // Video/Broadband 수동 분류 공유
+    typeOverrides:     loadTypeOverrides(),       // Competitor/Industry 수동 분류 공유
+    lastUpdatedAt:     new Date().toISOString(),
+    monthStart:        getCurrentMonthStartDateString(),
+    updatedBy:         owner
+  };
+  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+
+  try {
+    // 현재 SHA 조회 (파일 업데이트에 필요)
+    const headRes = await fetch(apiUrl, {
+      headers: { Authorization: `token ${pat}`, Accept: "application/vnd.github+json" }
+    });
+    let sha = null;
+    if (headRes.ok) {
+      const meta = await headRes.json();
+      sha = meta.sha || null;
+    }
+
+    const body = { message: `sync: news update ${new Date().toISOString().slice(0,16)}`, content: encoded };
+    if (sha) body.sha = sha;
+
+    const putRes = await fetch(apiUrl, {
+      method:  "PUT",
+      headers: { Authorization: `token ${pat}`, "Content-Type": "application/json", Accept: "application/vnd.github+json" },
+      body:    JSON.stringify(body)
+    });
+    if (!putRes.ok) {
+      const errJson = await putRes.json().catch(() => ({}));
+      return { ok: false, reason: errJson.message || `HTTP ${putRes.status}` };
+    }
+    return { ok: true };
+  } catch(e) {
+    return { ok: false, reason: e.message };
+  }
+}
+
+function initGitHubUI() {
+  const { pat } = getGhConfig();
+  const patEl   = document.getElementById("ghPat");
+  if (patEl) patEl.value = pat;
+  updateGhStatus();
+}
+
+function saveGhConfig() {
+  const pat = (document.getElementById("ghPat")?.value || "").trim();
+  if (pat) localStorage.setItem(GH_PAT_KEY, pat);
+  else     localStorage.removeItem(GH_PAT_KEY);
+  updateGhStatus();
+  setGhHint(pat ? "✓ PAT saved. Refresh 버튼을 누르면 자동으로 GitHub에 동기화됩니다." : "PAT cleared. 읽기 전용 모드입니다.", pat ? "ok" : "");
+}
+
+function clearGhConfig() {
+  localStorage.removeItem(GH_PAT_KEY);
+  const patEl = document.getElementById("ghPat");
+  if (patEl) patEl.value = "";
+  updateGhStatus();
+  setGhHint("PAT cleared. 읽기 전용 모드로 전환됩니다.", "");
+}
+
+function updateGhStatus() {
+  const { pat } = getGhConfig();
+  const el = document.getElementById("ghSyncStatus");
+  if (!el) return;
+  if (pat) {
+    el.textContent = "● Read + Write"; el.className = "apikey-status set";
+  } else {
+    el.textContent = "○ Read only (auto)"; el.className = "apikey-status unset";
+  }
+}
+
+function setGhHint(msg, type) {
+  const el = document.getElementById("ghHint");
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = type === "ok" ? "var(--success)" : type === "warn" ? "var(--warning)" : "var(--text-muted)";
+}
+
+function toggleGhPatVisibility() {
+  const el = document.getElementById("ghPat");
+  if (el) el.type = el.type === "password" ? "text" : "password";
+}
+
+/** GitHub 데이터에서 override를 로컬에 병합 적용
+ *  - 원칙: 로컬에 없는 항목만 추가 (로컬 수정이 GitHub보다 우선)
+ *  - 이미 로컬에 오버라이드된 항목은 건드리지 않음
+ */
+function applyGitHubOverrides(ghData) {
+  if (!ghData) return;
+
+  // Category overrides (Video/Broadband)
+  if (ghData.categoryOverrides && typeof ghData.categoryOverrides === "object") {
+    const local  = loadCategoryOverrides();
+    const merged = { ...ghData.categoryOverrides, ...local }; // 로컬 우선
+    saveCategoryOverrides(merged);
+  }
+
+  // Type overrides (Competitor/Industry)
+  if (ghData.typeOverrides && typeof ghData.typeOverrides === "object") {
+    const local  = loadTypeOverrides();
+    const merged = { ...ghData.typeOverrides, ...local };     // 로컬 우선
+    saveTypeOverrides(merged);
+  }
+}
+
+async function manualPullFromGitHub() {
+  const btn = document.getElementById("ghPullBtn");
+  if (btn) { btn.textContent = "Pulling…"; btn.disabled = true; }
+  const data = await loadFromGitHub();
+  if (!data || !Array.isArray(data.articles)) {
+    setGhHint("⚠ No data found in GitHub. Check owner/repo settings.", "warn");
+  } else {
+    const pruned = pruneArticlesOutsideCurrentMonth(data.articles);
+    allArticles  = mergeStoredAndFetchedArticles(loadStoredArticles(), pruned);
+    // LinkedIn 포스트 병합
+    if (Array.isArray(data.liPosts) && data.liPosts.length > 0) {
+      const existing = loadLiStoredPosts();
+      const merged   = [...data.liPosts, ...existing].filter((p, i, arr) =>
+        arr.findIndex(x => (x.url || x.title) === (p.url || p.title)) === i);
+      saveLiStoredPosts(merged);
+    }
+    // 카테고리 오버라이드 병합 (로컬 우선)
+    applyGitHubOverrides(data);
+    saveStoredArticles(allArticles);
+    applyFilters(); renderSummaryCards(); buildSidebarFilters(); renderLiPostsTab();
+    const catCount  = Object.keys(data.categoryOverrides || {}).length;
+    const typeCount = Object.keys(data.typeOverrides     || {}).length;
+    const ts = data.lastUpdatedAt ? new Date(data.lastUpdatedAt).toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "unknown";
+    setGhHint(`✓ Pulled ${pruned.length} articles · ${catCount} category overrides · ${typeCount} type overrides (${ts} by ${data.updatedBy||"?"}).`, "ok");
+  }
+  if (btn) { btn.textContent = "Pull"; btn.disabled = false; }
+}
+
+async function manualPushToGitHub() {
+  const btn = document.getElementById("ghPushBtn");
+  if (btn) { btn.textContent = "Pushing…"; btn.disabled = true; }
+  const liPosts = loadLiStoredPosts();
+  const result  = await pushToGitHub(allArticles, liPosts);
+  if (result.ok) {
+    const catCount  = Object.keys(loadCategoryOverrides()).length;
+    const typeCount = Object.keys(loadTypeOverrides()).length;
+    setGhHint(`✓ Pushed ${Math.min(allArticles.length, GH_MAX_SYNC_ARTICLES)} articles · ${catCount} category overrides · ${typeCount} type overrides to GitHub.`, "ok");
+  } else if (result.reason === "not-configured") {
+    setGhHint("⚠ PAT is required for push. Enter your GitHub Personal Access Token.", "warn");
+  } else {
+    setGhHint(`✗ Push failed: ${result.reason}`, "warn");
+  }
+  if (btn) { btn.textContent = "Push", btn.disabled = false; }
+}
+
 function finishRefresh() {
   setRefreshState(false);
   const now = new Date().toISOString();
@@ -1511,6 +1772,24 @@ function finishRefresh() {
   renderCompetitorLinks();
   renderLiPostsTab();
   buildSidebarFilters();
+  // PAT가 설정된 경우 GitHub에 자동 Push
+  const { pat } = getGhConfig();
+  if (pat) {
+    pushToGitHub(allArticles, loadLiStoredPosts()).then(result => {
+      const hint = document.getElementById("ghHint");
+      if (hint) {
+        if (result.ok) {
+          const catCount  = Object.keys(loadCategoryOverrides()).length;
+          const typeCount = Object.keys(loadTypeOverrides()).length;
+          hint.textContent = `✓ Auto-synced ${Math.min(allArticles.length, GH_MAX_SYNC_ARTICLES)} articles · ${catCount} category overrides · ${typeCount} type overrides to GitHub.`;
+        } else {
+          hint.textContent = `⚠ Auto-sync failed: ${result.reason}`;
+        }
+        hint.style.color = result.ok ? "var(--success)" : "var(--warning)";
+      }
+      updateGhStatus();
+    });
+  }
 }
 
 /* ==============================================================
@@ -1589,8 +1868,8 @@ function buildCardHTML(a, bm) {
   <div class="news-card${noLink}" ${onclick}>
     <div class="news-card-top">
       <div class="news-card-badges">
-        ${typeBadge}
         ${catBadge}
+        ${typeBadge}
       </div>
       <button class="${bmClass}" title="${bmState?'Remove bookmark':'Bookmark'}" onclick="toggleBookmark('${aidAttr}',event)">${bmIcon}</button>
     </div>
@@ -1873,8 +2152,36 @@ async function initializeDashboard() {
     renderLiPostsTab();
   }
 
-  // API Key UI 초기화
+  // API Key / GitHub UI 초기화
   initApiKeyUI();
+  initGitHubUI();
+
+  // GitHub에서 공유 데이터 Pull (설정된 경우)
+  const ghData = await loadFromGitHub();
+  if (ghData && Array.isArray(ghData.articles) && ghData.articles.length > 0) {
+    const pruned = pruneArticlesOutsideCurrentMonth(ghData.articles);
+    if (pruned.length > 0) {
+      allArticles = mergeStoredAndFetchedArticles(allArticles, pruned);
+      if (Array.isArray(ghData.liPosts) && ghData.liPosts.length > 0) {
+        const existing = loadLiStoredPosts();
+        const merged   = [...ghData.liPosts, ...existing].filter((p, i, arr) =>
+          arr.findIndex(x => (x.url || x.title) === (p.url || p.title)) === i);
+        saveLiStoredPosts(merged);
+      }
+      // 카테고리 오버라이드 병합 (로컬 우선)
+      applyGitHubOverrides(ghData);
+      saveStoredArticles(allArticles);
+      applyFilters(); renderSummaryCards(); buildSidebarFilters(); renderLiPostsTab();
+      const ghHint = document.getElementById("ghHint");
+      if (ghHint) {
+        const catCount  = Object.keys(ghData.categoryOverrides || {}).length;
+        const typeCount = Object.keys(ghData.typeOverrides     || {}).length;
+        const ts = ghData.lastUpdatedAt ? new Date(ghData.lastUpdatedAt).toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "?";
+        ghHint.textContent = `✓ Loaded ${pruned.length} articles · ${catCount} category overrides · ${typeCount} type overrides from GitHub (${ts} by ${ghData.updatedBy||"?"}).`;
+        ghHint.style.color = "var(--success)";
+      }
+    }
+  }
 
   // Fetch initial (current month) news — runs in background
   await fetchInitialCurrentMonthNews();
