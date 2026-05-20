@@ -582,39 +582,26 @@ const competitorSources = [
   { company:"Innopia",         officialWebsite:"https://www.innopia.com",             newsUrl:"https://www.innopia.com/news/",                       rssUrl:"", linkedinUrl:"https://www.linkedin.com/company/innopia-technologies/",enabled:true }
 ];
 
-// Google News queries — 총 10개 (목표: 10초 이내)
-// 활성 쿼리 8개 × 평균 1.2s = 약 10s
-// 비활성(enabled:false) 쿼리는 필요 시 true로 변경
+// Google News queries — 4개 활성 (백그라운드 실행, 최소화)
+// RSS가 주요 소스, GNews는 보조 — 비활성화해도 대시보드 정상 동작
 const googleNewsQueries = [
-  // ── Competitor: Video — 3개 (STB/OTT 핵심사 압축) ──────────────
-  // Vantiva + Sagemcom: 글로벌 STB 양대 산맥, 뉴스 풍부
-  { query:"Vantiva Sagemcom set-top box Android TV", type:"competitor", company:"Vantiva",         keyword:"Set-top Box", enabled:true  },
-  // SDMC: Android TV ODM 대표주자
-  { query:"SDMC Android TV Google TV operator",      type:"competitor", company:"SDMC Technology", keyword:"Android TV",  enabled:true  },
-  // SEI Robotics / Strong / Innopia 묶음 — 소형사라 단독 쿼리 비효율
-  { query:"SEI Robotics Strong Skyworth STB IPTV",   type:"competitor", company:"SEI Robotics",    keyword:"STB",         enabled:true  },
+  // ── Competitor: Video (1개) ─────────────────────────────────────
+  { query:"Vantiva Sagemcom SDMC set-top box Android TV", type:"competitor", company:"Vantiva", keyword:"Set-top Box", enabled:true },
 
-  // ── Competitor: Broadband — 3개 (대형사 우선) ───────────────────
-  // ZTE + Huawei: 5G/PON 뉴스 최다 생산
-  { query:"ZTE Huawei broadband 5G FWA gateway",     type:"competitor", company:"ZTE",             keyword:"5G FWA",       enabled:true  },
-  // CommScope + Zyxel: Wi-Fi/Cable 대표
-  { query:"CommScope Zyxel Wi-Fi broadband CPE",     type:"competitor", company:"CommScope",       keyword:"Broadband CPE",enabled:true  },
-  // Hitron + Sercomm + Humax: 케이블/PON 미드티어
-  { query:"Hitron Sercomm Humax cable broadband ONT",type:"competitor", company:"Hitron",          keyword:"Cable Gateway",enabled:true  },
+  // ── Competitor: Broadband (1개) ────────────────────────────────
+  { query:"ZTE Huawei CommScope Zyxel broadband gateway", type:"competitor", company:"ZTE",     keyword:"Broadband CPE", enabled:true },
 
-  // ── Industry: Video — 1개 ──────────────────────────────────────
-  // OTT/FAST/CTV 트렌드 하나로 통합
-  { query:"Android TV OTT FAST CTV streaming operator",type:"industry", company:"",               keyword:"OTT",          enabled:true  },
+  // ── Industry: Video (1개) ───────────────────────────────────────
+  { query:"Android TV OTT FAST CTV streaming operator",   type:"industry",  company:"",        keyword:"OTT",           enabled:true },
 
-  // ── Industry: Broadband — 1개 ─────────────────────────────────
-  // Wi-Fi 7 + XGS-PON + 5G FWA 핵심 트렌드 통합
-  { query:"Wi-Fi 7 XGS-PON 5G FWA broadband gateway", type:"industry", company:"",               keyword:"Wi-Fi 7",      enabled:true  },
+  // ── Industry: Broadband (1개) ──────────────────────────────────
+  { query:"Wi-Fi 7 XGS-PON 5G FWA fiber broadband",      type:"industry",  company:"",        keyword:"Wi-Fi 7",       enabled:true },
 
-  // ── 예비 쿼리 (필요 시 enabled:true로 변경) ────────────────────
-  { query:"Innopia STB IPTV operator",                 type:"competitor", company:"Innopia",       keyword:"STB",         enabled:false },
-  { query:"Gemtek 5G FWA outdoor CPE",                 type:"competitor", company:"Gemtek",        keyword:"5G FWA",      enabled:false },
-  { query:"DOCSIS cable modem broadband operator",     type:"industry",   company:"",              keyword:"DOCSIS",      enabled:false },
-  { query:"6G broadband wireless network",             type:"industry",   company:"",              keyword:"6G",          enabled:false }
+  // ── 예비 (필요 시 enabled:true) ─────────────────────────────────
+  { query:"SEI Robotics Strong Skyworth Innopia STB",     type:"competitor", company:"SEI Robotics", keyword:"STB",    enabled:false },
+  { query:"Hitron Sercomm Humax cable ONT broadband",     type:"competitor", company:"Hitron",        keyword:"Cable Gateway", enabled:false },
+  { query:"DOCSIS cable modem broadband",                 type:"industry",   company:"",              keyword:"DOCSIS", enabled:false },
+  { query:"6G broadband wireless network",                type:"industry",   company:"",              keyword:"6G",     enabled:false }
 ];
 
 // Manual LinkedIn posts — add entries here to display them
@@ -1107,7 +1094,7 @@ function normalizeArticle(item, meta) {
 async function fetchRssFeed(source, meta) {
   if (!source.rssUrl) return [];
   const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 5000);
+  const t = setTimeout(() => ctrl.abort(), 3000);
   try {
     const res  = await fetch(buildRss2JsonUrl(source.rssUrl), { signal: ctrl.signal });
     clearTimeout(t);
@@ -1121,7 +1108,7 @@ async function fetchRssFeed(source, meta) {
 async function fetchGoogleNews(queryObj, mode) {
   const rssUrl = buildGoogleNewsRssUrl(queryObj.query, mode);
   const ctrl   = new AbortController();
-  const t      = setTimeout(() => ctrl.abort(), 9000);
+  const t      = setTimeout(() => ctrl.abort(), 3000);
   try {
     const res  = await fetch(buildRss2JsonUrl(rssUrl), { signal: ctrl.signal });
     clearTimeout(t);
@@ -1146,63 +1133,54 @@ async function fetchGoogleNews(queryObj, mode) {
    ============================================================== */
 // GNews 요청 간 기본 딜레이 (ms) — rss2json 무료 분당 60회 기준
 // 22개 쿼리 × 1200ms ≒ 26초, 분당 50회 이내 유지
-const GNEWS_DELAY_MS        = 600;  // 요청 간 간격 (600ms × 17쿼리 ≈ 10초)
-const GNEWS_RETRY_DELAY_MS  = 2000; // 429 재시도 대기
-const GNEWS_MAX_RETRY       = 1;    // 최대 1회 재시도
+const GNEWS_BATCH_SIZE      = 3;    // 한 번에 병렬 실행할 쿼리 수
+const GNEWS_BATCH_DELAY_MS  = 400;  // 배치 간 딜레이 (rss2json 버스트 방지)
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-async function fetchGoogleNewsWithRetry(qObj, mode, retryLeft) {
-  try {
-    return await fetchGoogleNews(qObj, mode);
-  } catch(e) {
-    const is429 = e.message && e.message.includes("429");
-    if (is429 && retryLeft > 0) {
-      await sleep(GNEWS_RETRY_DELAY_MS);
-      return fetchGoogleNewsWithRetry(qObj, mode, retryLeft - 1);
-    }
-    throw e;
-  }
-}
-
-async function fetchGNewsSequential(queries, mode) {
-  // GNews 순차 호출 + 429 자동 재시도 + 진행 카운터 표시
+/**
+ * fetchGNewsParallel — 배치 병렬 실행
+ * GNEWS_BATCH_SIZE개씩 묶어 Promise.all로 동시 실행
+ * 타임아웃 3초 × 3배치 = 최악 ~10초
+ */
+async function fetchGNewsParallel(queries, mode) {
   const results = [];
   const total   = queries.length;
-  for (let i = 0; i < total; i++) {
-    const qObj = queries[i];
-    setRefreshState(true, `GNews ${i + 1}/${total}…`);
-    try {
-      const arts = await fetchGoogleNewsWithRetry(qObj, mode, GNEWS_MAX_RETRY);
-      sourceStatuses.push({ name: `GNews: "${qObj.query}"`, type: "Google News", status: "ok", count: arts.length, error: "" });
-      results.push(...arts);
-    } catch(e) {
-      sourceStatuses.push({ name: `GNews: "${qObj.query}"`, type: "Google News", status: "error", count: 0, error: e.message });
-    }
-    await sleep(GNEWS_DELAY_MS);
+
+  for (let i = 0; i < total; i += GNEWS_BATCH_SIZE) {
+    const batch    = queries.slice(i, i + GNEWS_BATCH_SIZE);
+    const batchEnd = Math.min(i + GNEWS_BATCH_SIZE, total);
+    const batchResults = await Promise.allSettled(
+      batch.map(qObj =>
+        fetchGoogleNews(qObj, mode)
+          .then(arts => {
+            sourceStatuses.push({ name: `GNews: "${qObj.query}"`, type: "Google News", status: "ok", count: arts.length, error: "" });
+            return arts;
+          })
+          .catch(e => {
+            sourceStatuses.push({ name: `GNews: "${qObj.query}"`, type: "Google News", status: "error", count: 0, error: e.message });
+            return [];
+          })
+      )
+    );
+
+    results.push(...batchResults.flatMap(r => r.status === "fulfilled" ? r.value : []));
+
+    // 배치 사이 짧은 딜레이 (마지막 배치 제외)
+    if (batchEnd < total) await sleep(GNEWS_BATCH_DELAY_MS);
   }
+
   return results;
 }
 
+// 이전 버전 호환용 alias
+const fetchGNewsSequential = fetchGNewsParallel;
+
 async function fetchInitialCurrentMonthNews() {
-  setRefreshState(true, "Competitor news…");
+  setRefreshState(true, "Loading media…");
   sourceStatuses = [];
 
-  // ① Competitor GNews 먼저 순차 실행 — companies 태그 확보 최우선
-  //    Industry Media 병렬 요청이 rss2json 쿼터를 소진하기 전에 처리
-  const competitorQueries = googleNewsQueries.filter(q => q.enabled && q.type === "competitor");
-  const industryQueries   = googleNewsQueries.filter(q => q.enabled && q.type !== "competitor");
-
-  const competitorGNews = await fetchGNewsSequential(competitorQueries, "initial");
-
-  // 중간 반영 — Competitor 기사 먼저 화면에 표시
-  const stored0 = loadStoredArticles();
-  allArticles   = mergeStoredAndFetchedArticles(stored0, competitorGNews);
-  saveStoredArticles(allArticles);
-  applyFilters(); renderSummaryCards(); buildSidebarFilters();
-
-  // ② Industry Media + Competitor RSS — 병렬
-  setRefreshState(true, "Industry media…");
+  // ① Industry Media + Competitor RSS — 병렬 (주요 소스)
   const mediaTasks = industrySources.filter(s => s.enabled && s.rssUrl).map(src => {
     const meta = { source: src.name, type: "media", category: src.category, companies: [], keywords: [] };
     return fetchRssFeed(src, meta)
@@ -1231,25 +1209,32 @@ async function fetchInitialCurrentMonthNews() {
   ]);
   const rssArticles = [...mediaResults.flat(), ...competitorRssResults.flat()];
 
-  // 중간 반영
+  // LinkedIn
   const liArts = getLinkedInArticles().filter(a => !a.publishedAt || isWithinCurrentMonthToDate(a.publishedAt));
-  allArticles  = mergeStoredAndFetchedArticles(allArticles, [...rssArticles, ...liArts]);
-  saveStoredArticles(allArticles);
-  applyFilters(); renderSummaryCards(); buildSidebarFilters();
-
-  // ③ Industry GNews — 순차
-  const gnewsFetched = await fetchGNewsSequential(industryQueries, "initial");
-
-  // LinkedIn manual posts
   if (manualLinkedInPosts.length > 0) {
     sourceStatuses.push({ name: "LinkedIn (Manual)", type: "LinkedIn", status: "ok", count: liArts.length, error: "" });
   }
 
-  allArticles  = mergeStoredAndFetchedArticles(allArticles, gnewsFetched);
-  lastNewCount = gnewsFetched.length + priorityFetched.length;
+  // ② RSS 결과 즉시 반영 → UI 즉시 표시
+  const stored = loadStoredArticles();
+  allArticles  = mergeStoredAndFetchedArticles(stored, [...rssArticles, ...liArts]);
+  lastNewCount = rssArticles.length;
   saveStoredArticles(allArticles);
 
+  // ③ finishRefresh 먼저 — 버튼 즉시 해제, 화면 표시
   finishRefresh();
+
+  // ④ GNews 백그라운드 실행 (UI 차단 없음, 4개 병렬)
+  const gnewsQueries = googleNewsQueries.filter(q => q.enabled);
+  if (gnewsQueries.length > 0) {
+    fetchGNewsParallel(gnewsQueries, "initial").then(gnewsFetched => {
+      if (gnewsFetched.length > 0) {
+        allArticles = mergeStoredAndFetchedArticles(allArticles, gnewsFetched);
+        saveStoredArticles(allArticles);
+        applyFilters(); renderSummaryCards(); buildSidebarFilters(); renderSourceStatus();
+      }
+    });
+  }
 }
 
 /* ==============================================================
@@ -1291,26 +1276,32 @@ async function refreshLast24HourNews() {
   ]);
   const priorityFetched = [...mediaResults.flat(), ...competitorResults.flat()];
 
-  // ③ Google News — Competitor 먼저, Industry 다음
-  const cQ = googleNewsQueries.filter(q => q.enabled && q.type === "competitor");
-  const iQ = googleNewsQueries.filter(q => q.enabled && q.type !== "competitor");
-  const gnewsFetched = [
-    ...await fetchGNewsSequential(cQ, "refresh"),
-    ...await fetchGNewsSequential(iQ, "refresh")
-  ];
-
   const liArts = getLinkedInArticles().filter(a => !a.publishedAt || isWithinCurrentMonthToDate(a.publishedAt));
   if (manualLinkedInPosts.length > 0) {
     sourceStatuses.push({ name: "LinkedIn (Manual)", type: "LinkedIn", status: "ok", count: liArts.length, error: "" });
   }
 
+  // RSS 결과 즉시 반영
   const prevCount = allArticles.length;
   const stored    = loadStoredArticles();
-  allArticles     = mergeStoredAndFetchedArticles(stored, [...priorityFetched, ...gnewsFetched, ...liArts]);
+  allArticles     = mergeStoredAndFetchedArticles(stored, [...priorityFetched, ...liArts]);
   lastNewCount    = Math.max(0, allArticles.length - prevCount);
   saveStoredArticles(allArticles);
 
+  // finishRefresh 먼저 — 버튼 즉시 해제
   finishRefresh();
+
+  // GNews 백그라운드 실행 (4개 병렬, UI 차단 없음)
+  const gnewsQueries = googleNewsQueries.filter(q => q.enabled);
+  if (gnewsQueries.length > 0) {
+    fetchGNewsParallel(gnewsQueries, "refresh").then(gnewsFetched => {
+      if (gnewsFetched.length > 0) {
+        allArticles = mergeStoredAndFetchedArticles(allArticles, gnewsFetched);
+        saveStoredArticles(allArticles);
+        applyFilters(); renderSummaryCards(); buildSidebarFilters(); renderSourceStatus();
+      }
+    });
+  }
 }
 
 /* ---------------------------------------------------------------
