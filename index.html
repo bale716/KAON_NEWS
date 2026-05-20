@@ -818,64 +818,83 @@ async function fetchGoogleNews(queryObj, mode) {
 
 /* ==============================================================
    ⑪ INITIAL LOAD — fetch current month
+   순서: ① Industry Media (병렬) → ② Competitor RSS (병렬)
+         → ③ Google News (순차, 300ms 간격) — 429 방지
    ============================================================== */
+const GNEWS_DELAY_MS = 300; // GNews 요청 간 딜레이 (ms)
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function fetchGNewsSequential(queries, mode) {
+  // GNews를 순차적으로 호출해 rss2json 429 rate limit 방지
+  const results = [];
+  for (const qObj of queries) {
+    try {
+      const arts = await fetchGoogleNews(qObj, mode);
+      sourceStatuses.push({ name: `GNews: "${qObj.query}"`, type: "Google News", status: "ok", count: arts.length, error: "" });
+      results.push(...arts);
+    } catch(e) {
+      sourceStatuses.push({ name: `GNews: "${qObj.query}"`, type: "Google News", status: "error", count: 0, error: e.message });
+    }
+    await sleep(GNEWS_DELAY_MS);
+  }
+  return results;
+}
+
 async function fetchInitialCurrentMonthNews() {
   setRefreshState(true);
   sourceStatuses = [];
-  const tasks = [];
 
-  // Industry media (filter to current month)
-  industrySources.filter(s => s.enabled && s.rssUrl).forEach(src => {
+  // ① Industry Media — 병렬 (우선순위 최상)
+  const mediaTasks = industrySources.filter(s => s.enabled && s.rssUrl).map(src => {
     const meta = { source: src.name, type: "media", category: src.category, companies: [], keywords: [] };
-    tasks.push(
-      fetchRssFeed(src, meta)
-        .then(arts => {
-          const filtered = arts.filter(a => isWithinCurrentMonthToDate(a.publishedAt));
-          sourceStatuses.push({ name: src.name, type: "Industry Media", status: "ok", count: filtered.length, error: "" });
-          return filtered;
-        })
-        .catch(e => { sourceStatuses.push({ name: src.name, type: "Industry Media", status: "error", count: 0, error: e.message }); return []; })
-    );
+    return fetchRssFeed(src, meta)
+      .then(arts => {
+        const filtered = arts.filter(a => isWithinCurrentMonthToDate(a.publishedAt));
+        sourceStatuses.push({ name: src.name, type: "Industry Media", status: "ok", count: filtered.length, error: "" });
+        return filtered;
+      })
+      .catch(e => { sourceStatuses.push({ name: src.name, type: "Industry Media", status: "error", count: 0, error: e.message }); return []; });
   });
 
-  // Competitor RSS
-  competitorSources.filter(s => s.enabled && s.rssUrl).forEach(src => {
+  // ② Competitor RSS — 병렬
+  const competitorTasks = competitorSources.filter(s => s.enabled && s.rssUrl).map(src => {
     const meta = { source: src.company, type: "competitor", companies: [src.company], keywords: [], category: "Official Website" };
-    tasks.push(
-      fetchRssFeed(src, meta)
-        .then(arts => {
-          const filtered = arts.filter(a => isWithinCurrentMonthToDate(a.publishedAt));
-          sourceStatuses.push({ name: src.company + " RSS", type: "Competitor RSS", status: "ok", count: filtered.length, error: "" });
-          return filtered;
-        })
-        .catch(e => { sourceStatuses.push({ name: src.company + " RSS", type: "Competitor RSS", status: "error", count: 0, error: e.message }); return []; })
-    );
+    return fetchRssFeed(src, meta)
+      .then(arts => {
+        const filtered = arts.filter(a => isWithinCurrentMonthToDate(a.publishedAt));
+        sourceStatuses.push({ name: src.company + " RSS", type: "Competitor RSS", status: "ok", count: filtered.length, error: "" });
+        return filtered;
+      })
+      .catch(e => { sourceStatuses.push({ name: src.company + " RSS", type: "Competitor RSS", status: "error", count: 0, error: e.message }); return []; });
   });
 
-  // Google News — initial (after:YYYY-MM-01)
-  googleNewsQueries.filter(q => q.enabled).forEach(qObj => {
-    tasks.push(
-      fetchGoogleNews(qObj, "initial")
-        .then(arts => {
-          sourceStatuses.push({ name: `GNews: "${qObj.query}"`, type: "Google News", status: "ok", count: arts.length, error: "" });
-          return arts;
-        })
-        .catch(e => { sourceStatuses.push({ name: `GNews: "${qObj.query}"`, type: "Google News", status: "error", count: 0, error: e.message }); return []; })
-    );
-  });
+  // Industry Media + Competitor RSS 먼저 완료
+  const [mediaResults, competitorResults] = await Promise.all([
+    Promise.all(mediaTasks),
+    Promise.all(competitorTasks)
+  ]);
+  const priorityFetched = [...mediaResults.flat(), ...competitorResults.flat()];
 
-  const results = await Promise.allSettled(tasks);
-  const fetched = results.flatMap(r => r.status === "fulfilled" ? r.value : []);
-
-  // LinkedIn manual posts (filter to current month)
+  // 우선 결과를 화면에 먼저 반영
   const liArts = getLinkedInArticles().filter(a => !a.publishedAt || isWithinCurrentMonthToDate(a.publishedAt));
+  const stored = loadStoredArticles();
+  allArticles  = mergeStoredAndFetchedArticles(stored, [...priorityFetched, ...liArts]);
+  saveStoredArticles(allArticles);
+  applyFilters(); renderSummaryCards(); buildSidebarFilters();
+
+  // ③ Google News — 순차 (딜레이 포함, 429 방지)
+  const gnewsFetched = await fetchGNewsSequential(
+    googleNewsQueries.filter(q => q.enabled), "initial"
+  );
+
+  // LinkedIn manual posts
   if (manualLinkedInPosts.length > 0) {
     sourceStatuses.push({ name: "LinkedIn (Manual)", type: "LinkedIn", status: "ok", count: liArts.length, error: "" });
   }
 
-  const stored = loadStoredArticles();
-  allArticles   = mergeStoredAndFetchedArticles(stored, [...fetched, ...liArts]);
-  lastNewCount  = fetched.length;
+  allArticles  = mergeStoredAndFetchedArticles(allArticles, gnewsFetched);
+  lastNewCount = gnewsFetched.length + priorityFetched.length;
   saveStoredArticles(allArticles);
 
   finishRefresh();
@@ -883,60 +902,56 @@ async function fetchInitialCurrentMonthNews() {
 
 /* ==============================================================
    ⑫ REFRESH — last 24 hours only
+   순서: ① Industry Media (병렬) → ② Competitor RSS (병렬)
+         → ③ Google News (순차, 300ms 간격) — 429 방지
    ============================================================== */
 async function refreshLast24HourNews() {
   setRefreshState(true);
   sourceStatuses = [];
-  const tasks = [];
 
-  industrySources.filter(s => s.enabled && s.rssUrl).forEach(src => {
+  // ① Industry Media — 병렬
+  const mediaTasks = industrySources.filter(s => s.enabled && s.rssUrl).map(src => {
     const meta = { source: src.name, type: "media", category: src.category, companies: [], keywords: [] };
-    tasks.push(
-      fetchRssFeed(src, meta)
-        .then(arts => {
-          const recent = arts.filter(a => isWithinRefreshWindow(a.publishedAt));
-          sourceStatuses.push({ name: src.name, type: "Industry Media", status: "ok", count: recent.length, error: "" });
-          return recent;
-        })
-        .catch(e => { sourceStatuses.push({ name: src.name, type: "Industry Media", status: "error", count: 0, error: e.message }); return []; })
-    );
+    return fetchRssFeed(src, meta)
+      .then(arts => {
+        const recent = arts.filter(a => isWithinRefreshWindow(a.publishedAt));
+        sourceStatuses.push({ name: src.name, type: "Industry Media", status: "ok", count: recent.length, error: "" });
+        return recent;
+      })
+      .catch(e => { sourceStatuses.push({ name: src.name, type: "Industry Media", status: "error", count: 0, error: e.message }); return []; });
   });
 
-  competitorSources.filter(s => s.enabled && s.rssUrl).forEach(src => {
+  // ② Competitor RSS — 병렬
+  const competitorTasks = competitorSources.filter(s => s.enabled && s.rssUrl).map(src => {
     const meta = { source: src.company, type: "competitor", companies: [src.company], keywords: [], category: "Official Website" };
-    tasks.push(
-      fetchRssFeed(src, meta)
-        .then(arts => {
-          const recent = arts.filter(a => isWithinRefreshWindow(a.publishedAt));
-          sourceStatuses.push({ name: src.company + " RSS", type: "Competitor RSS", status: "ok", count: recent.length, error: "" });
-          return recent;
-        })
-        .catch(e => { sourceStatuses.push({ name: src.company + " RSS", type: "Competitor RSS", status: "error", count: 0, error: e.message }); return []; })
-    );
+    return fetchRssFeed(src, meta)
+      .then(arts => {
+        const recent = arts.filter(a => isWithinRefreshWindow(a.publishedAt));
+        sourceStatuses.push({ name: src.company + " RSS", type: "Competitor RSS", status: "ok", count: recent.length, error: "" });
+        return recent;
+      })
+      .catch(e => { sourceStatuses.push({ name: src.company + " RSS", type: "Competitor RSS", status: "error", count: 0, error: e.message }); return []; });
   });
 
-  googleNewsQueries.filter(q => q.enabled).forEach(qObj => {
-    tasks.push(
-      fetchGoogleNews(qObj, "refresh")
-        .then(arts => {
-          sourceStatuses.push({ name: `GNews: "${qObj.query}"`, type: "Google News", status: "ok", count: arts.length, error: "" });
-          return arts;
-        })
-        .catch(e => { sourceStatuses.push({ name: `GNews: "${qObj.query}"`, type: "Google News", status: "error", count: 0, error: e.message }); return []; })
-    );
-  });
+  const [mediaResults, competitorResults] = await Promise.all([
+    Promise.all(mediaTasks),
+    Promise.all(competitorTasks)
+  ]);
+  const priorityFetched = [...mediaResults.flat(), ...competitorResults.flat()];
 
-  const results = await Promise.allSettled(tasks);
-  const fetched = results.flatMap(r => r.status === "fulfilled" ? r.value : []);
-  const liArts  = getLinkedInArticles().filter(a => !a.publishedAt || isWithinCurrentMonthToDate(a.publishedAt));
+  // ③ Google News — 순차 (딜레이 포함)
+  const gnewsFetched = await fetchGNewsSequential(
+    googleNewsQueries.filter(q => q.enabled), "refresh"
+  );
 
+  const liArts = getLinkedInArticles().filter(a => !a.publishedAt || isWithinCurrentMonthToDate(a.publishedAt));
   if (manualLinkedInPosts.length > 0) {
     sourceStatuses.push({ name: "LinkedIn (Manual)", type: "LinkedIn", status: "ok", count: liArts.length, error: "" });
   }
 
   const prevCount = allArticles.length;
   const stored    = loadStoredArticles();
-  allArticles     = mergeStoredAndFetchedArticles(stored, [...fetched, ...liArts]);
+  allArticles     = mergeStoredAndFetchedArticles(stored, [...priorityFetched, ...gnewsFetched, ...liArts]);
   lastNewCount    = Math.max(0, allArticles.length - prevCount);
   saveStoredArticles(allArticles);
 
@@ -1239,7 +1254,17 @@ function renderSourceStatus() {
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:22px;color:var(--text-muted)">No source data yet. Click Refresh to load.</td></tr>`;
     return;
   }
-  tbody.innerHTML = sourceStatuses.map(s => {
+  // GNews 429 에러는 표시하지 않음 (rate limit noise 제거)
+  const visible = sourceStatuses.filter(s => {
+    const isGNews429 = s.type === "Google News" && s.status === "error"
+      && (s.error || "").includes("429");
+    return !isGNews429;
+  });
+  if (!visible.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:22px;color:var(--text-muted)">No source data yet. Click Refresh to load.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = visible.map(s => {
     const badge = s.status==="ok"
       ? `<span class="status-badge status-ok"><span class="status-dot"></span>OK</span>`
       : s.status==="pending"
