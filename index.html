@@ -1614,8 +1614,9 @@ async function pushToGitHub(articles, liPostsArr) {
   const payload = {
     articles:          articles.slice(0, GH_MAX_SYNC_ARTICLES),
     liPosts:           liPostsArr || [],
-    categoryOverrides: loadCategoryOverrides(),  // Video/Broadband 수동 분류 공유
-    typeOverrides:     loadTypeOverrides(),       // Competitor/Industry 수동 분류 공유
+    bookmarks:         loadBookmarks(),           // 팀 공유 북마크
+    categoryOverrides: loadCategoryOverrides(),   // Video/Broadband 수동 분류 공유
+    typeOverrides:     loadTypeOverrides(),        // Competitor/Industry 수동 분류 공유
     lastUpdatedAt:     new Date().toISOString(),
     monthStart:        getCurrentMonthStartDateString(),
     updatedBy:         owner
@@ -1704,6 +1705,14 @@ function toggleGhPatVisibility() {
 function applyGitHubOverrides(ghData) {
   if (!ghData) return;
 
+  // Bookmarks — 합집합 (GitHub ∪ 로컬): 담당자 북마크가 팀 전체에 표시
+  if (ghData.bookmarks && typeof ghData.bookmarks === "object") {
+    const local  = loadBookmarks();
+    // GitHub 북마크를 기본으로 깔고, 로컬에서 추가한 북마크를 덮어씌움
+    const merged = { ...ghData.bookmarks, ...local };
+    saveBookmarks(merged);
+  }
+
   // Category overrides (Video/Broadband)
   if (ghData.categoryOverrides && typeof ghData.categoryOverrides === "object") {
     const local  = loadCategoryOverrides();
@@ -1728,21 +1737,26 @@ async function manualPullFromGitHub() {
   } else {
     const pruned = pruneArticlesOutsideCurrentMonth(data.articles);
     allArticles  = mergeStoredAndFetchedArticles(loadStoredArticles(), pruned);
-    // LinkedIn 포스트 병합
+    // LinkedIn 포스트 병합 + allArticles에 즉시 반영
     if (Array.isArray(data.liPosts) && data.liPosts.length > 0) {
       const existing = loadLiStoredPosts();
       const merged   = [...data.liPosts, ...existing].filter((p, i, arr) =>
         arr.findIndex(x => (x.url || x.title) === (p.url || p.title)) === i);
       saveLiStoredPosts(merged);
+      // 새로 병합된 LinkedIn 포스트를 allArticles에도 즉시 추가
+      const newLiArts = merged.map(liPostToArticle)
+        .filter(a => !a.publishedAt || isWithinCurrentMonthToDate(a.publishedAt));
+      allArticles = mergeStoredAndFetchedArticles(allArticles, newLiArts);
     }
-    // 카테고리 오버라이드 병합 (로컬 우선)
+    // 북마크 + 카테고리 오버라이드 병합
     applyGitHubOverrides(data);
     saveStoredArticles(allArticles);
     applyFilters(); renderSummaryCards(); buildSidebarFilters(); renderLiPostsTab();
+    const bmCount   = Object.keys(data.bookmarks       || {}).length;
     const catCount  = Object.keys(data.categoryOverrides || {}).length;
     const typeCount = Object.keys(data.typeOverrides     || {}).length;
     const ts = data.lastUpdatedAt ? new Date(data.lastUpdatedAt).toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "unknown";
-    setGhHint(`✓ Pulled ${pruned.length} articles · ${catCount} category overrides · ${typeCount} type overrides (${ts} by ${data.updatedBy||"?"}).`, "ok");
+    setGhHint(`✓ Pulled ${pruned.length} articles · ★ ${bmCount} bookmarks · ${data.liPosts?.length||0} LinkedIn posts · ${catCount}/${typeCount} overrides (${ts} by ${data.updatedBy||"?"}).`, "ok");
   }
   if (btn) { btn.textContent = "Pull"; btn.disabled = false; }
 }
@@ -1753,9 +1767,11 @@ async function manualPushToGitHub() {
   const liPosts = loadLiStoredPosts();
   const result  = await pushToGitHub(allArticles, liPosts);
   if (result.ok) {
+    const bmCount   = Object.keys(loadBookmarks()).length;
+    const liCount   = loadLiStoredPosts().length;
     const catCount  = Object.keys(loadCategoryOverrides()).length;
     const typeCount = Object.keys(loadTypeOverrides()).length;
-    setGhHint(`✓ Pushed ${Math.min(allArticles.length, GH_MAX_SYNC_ARTICLES)} articles · ${catCount} category overrides · ${typeCount} type overrides to GitHub.`, "ok");
+    setGhHint(`✓ Pushed ${Math.min(allArticles.length, GH_MAX_SYNC_ARTICLES)} articles · ★ ${bmCount} bookmarks · ${liCount} LinkedIn posts · ${catCount}/${typeCount} overrides to GitHub.`, "ok");
   } else if (result.reason === "not-configured") {
     setGhHint("⚠ PAT is required for push. Enter your GitHub Personal Access Token.", "warn");
   } else {
@@ -1783,9 +1799,11 @@ function finishRefresh() {
       const hint = document.getElementById("ghHint");
       if (hint) {
         if (result.ok) {
+          const bmCount   = Object.keys(loadBookmarks()).length;
+          const liCount   = loadLiStoredPosts().length;
           const catCount  = Object.keys(loadCategoryOverrides()).length;
           const typeCount = Object.keys(loadTypeOverrides()).length;
-          hint.textContent = `✓ Auto-synced ${Math.min(allArticles.length, GH_MAX_SYNC_ARTICLES)} articles · ${catCount} category overrides · ${typeCount} type overrides to GitHub.`;
+          hint.textContent = `✓ Auto-synced ${Math.min(allArticles.length, GH_MAX_SYNC_ARTICLES)} articles · ★ ${bmCount} bookmarks · ${liCount} LinkedIn posts · ${catCount}/${typeCount} overrides to GitHub.`;
         } else {
           hint.textContent = `⚠ Auto-sync failed: ${result.reason}`;
         }
@@ -2172,22 +2190,27 @@ async function initializeDashboard() {
     const pruned = pruneArticlesOutsideCurrentMonth(ghData.articles);
     if (pruned.length > 0) {
       allArticles = mergeStoredAndFetchedArticles(allArticles, pruned);
+      // LinkedIn 포스트 병합 + allArticles에 즉시 반영
       if (Array.isArray(ghData.liPosts) && ghData.liPosts.length > 0) {
         const existing = loadLiStoredPosts();
         const merged   = [...ghData.liPosts, ...existing].filter((p, i, arr) =>
           arr.findIndex(x => (x.url || x.title) === (p.url || p.title)) === i);
         saveLiStoredPosts(merged);
+        const newLiArts = merged.map(liPostToArticle)
+          .filter(a => !a.publishedAt || isWithinCurrentMonthToDate(a.publishedAt));
+        allArticles = mergeStoredAndFetchedArticles(allArticles, newLiArts);
       }
-      // 카테고리 오버라이드 병합 (로컬 우선)
+      // 북마크 + 카테고리 오버라이드 병합
       applyGitHubOverrides(ghData);
       saveStoredArticles(allArticles);
       applyFilters(); renderSummaryCards(); buildSidebarFilters(); renderLiPostsTab();
       const ghHint = document.getElementById("ghHint");
       if (ghHint) {
+        const bmCount   = Object.keys(ghData.bookmarks       || {}).length;
         const catCount  = Object.keys(ghData.categoryOverrides || {}).length;
         const typeCount = Object.keys(ghData.typeOverrides     || {}).length;
         const ts = ghData.lastUpdatedAt ? new Date(ghData.lastUpdatedAt).toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "?";
-        ghHint.textContent = `✓ Loaded ${pruned.length} articles · ${catCount} category overrides · ${typeCount} type overrides from GitHub (${ts} by ${ghData.updatedBy||"?"}).`;
+        ghHint.textContent = `✓ Loaded ${pruned.length} articles · ★ ${bmCount} bookmarks · ${ghData.liPosts?.length||0} LinkedIn posts · ${catCount}/${typeCount} overrides from GitHub (${ts} by ${ghData.updatedBy||"?"}).`;
         ghHint.style.color = "var(--success)";
       }
     }
