@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAON Market & Competitor News Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CSS VARIABLES & THEMES
+   ============================================================ */
+:root {
+  --bg: #f0f2f7;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f8f9fc;
+  --bg-input: #ffffff;
+  --border: #e2e6f0;
+  --border-focus: #2557d6;
+  --text-primary: #0d1b3e;
+  --text-secondary: #5a6480;
+  --text-muted: #9aa3bc;
+  --accent: #2557d6;
+  --accent-light: #eef2fd;
+  --accent-hover: #1a42b0;
+  --danger: #e03a3a;
+  --success: #1a9e5c;
+  --warning: #d97706;
+  --shadow-sm: 0 1px 3px rgba(13,27,62,0.06), 0 1px 2px rgba(13,27,62,0.04);
+  --shadow-md: 0 4px 12px rgba(13,27,62,0.08), 0 2px 6px rgba(13,27,62,0.05);
+  --shadow-lg: 0 12px 32px rgba(13,27,62,0.10);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-lg: 14px;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-display: 'Syne', sans-serif;
+  --tag-competitor: #1a3a8f;
+  --tag-industry: #0f6b4c;
+  --tag-media: #6b2fa0;
+  --tag-official: #b84c00;
+  --tag-linkedin: #0a66c2;
+  --tag-manual: #7c3d12;
+  --header-h: 60px;
+}
+[data-theme="dark"] {
+  --bg: #0c0f1a;
+  --bg-card: #141828;
+  --bg-sidebar: #111422;
+  --bg-input: #1a1f35;
+  --border: #242a42;
+  --border-focus: #4a7dff;
+  --text-primary: #e8eaf6;
+  --text-secondary: #8a94b8;
+  --text-muted: #4a5278;
+  --accent: #4a7dff;
+  --accent-light: #141d38;
+  --accent-hover: #6992ff;
+  --danger: #ff5a5a;
+  --success: #34d48a;
+  --warning: #fbbf24;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
+  --tag-competitor: #3b5bdb;
+  --tag-industry: #1a8a62;
+  --tag-media: #7c3aed;
+  --tag-official: #c2620e;
+  --tag-linkedin: #2d87d4;
+  --tag-manual: #92400e;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+  transition: background 0.25s, color 0.25s;
+}
+a { color: var(--accent); text-decoration: none; }
+button { cursor: pointer; font-family: var(--font-sans); border: none; background: none; }
+input, select { font-family: var(--font-sans); }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--header-h);
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 24px; gap: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.25s, border-color 0.25s;
+}
+.header-brand {
+  display: flex; align-items: center; gap: 12px;
+  flex-shrink: 0;
+}
+.header-logo {
+  width: 32px; height: 32px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-family: var(--font-display);
+  font-size: 13px; font-weight: 800; letter-spacing: -0.5px;
+}
+.header-title {
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+.header-title span { color: var(--accent); }
+.header-sep { flex: 1; }
+.header-meta {
+  font-size: 11px; color: var(--text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+.header-meta strong { color: var(--text-secondary); }
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.btn-icon {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 15px; transition: all 0.15s;
+}
+.btn-icon:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+.btn-refresh {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 12px; height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--accent); color: white;
+  font-size: 12px; font-weight: 600;
+  transition: background 0.15s;
+}
+.btn-refresh:hover { background: var(--accent-hover); }
+.btn-refresh svg { transition: transform 0.4s; }
+.btn-refresh.loading svg { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.layout { display: flex; min-height: calc(100vh - var(--header-h)); }
+.sidebar {
+  width: 260px; flex-shrink: 0;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+  position: sticky; top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+  overflow-y: auto;
+  transition: background 0.25s, border-color 0.25s;
+}
+.main { flex: 1; padding: 24px; overflow-x: hidden; min-width: 0; }
+
+/* ============================================================
+   SIDEBAR NAVIGATION
+   ============================================================ */
+.sidebar-section { padding: 0 16px 16px; }
+.sidebar-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text-muted);
+  padding: 4px 6px; margin-bottom: 6px;
+}
+.sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+.nav-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 10px; border-radius: var(--radius-sm);
+  font-size: 13px; color: var(--text-secondary);
+  transition: all 0.12s; text-align: left;
+  width: 100%;
+}
+.nav-btn:hover { background: var(--accent-light); color: var(--accent); }
+.nav-btn.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+.nav-btn .count {
+  margin-left: auto;
+  font-size: 10px; font-family: var(--font-mono);
+  background: var(--border); color: var(--text-muted);
+  padding: 1px 6px; border-radius: 99px;
+  min-width: 20px; text-align: center;
+}
+.nav-btn.active .count { background: var(--accent); color: white; }
+.sidebar-divider { height: 1px; background: var(--border); margin: 10px 16px; }
+
+/* Company filter pills */
+.sidebar-tags { display: flex; flex-direction: column; gap: 2px; }
+.tag-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 10px; border-radius: var(--radius-sm);
+  font-size: 12px; color: var(--text-secondary);
+  transition: all 0.12s; text-align: left; width: 100%;
+}
+.tag-btn:hover { background: var(--accent-light); color: var(--accent); }
+.tag-btn.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+.tag-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+}
+.tag-btn .count {
+  margin-left: auto; font-size: 10px; font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* Search in sidebar */
+.search-wrap { padding: 0 16px 12px; }
+.search-input {
+  width: 100%; padding: 7px 10px 7px 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 12px;
+  transition: border-color 0.15s;
+  position: relative;
+}
+.search-input:focus { outline: none; border-color: var(--border-focus); }
+.search-wrap-inner { position: relative; }
+.search-icon {
+  position: absolute; left: 9px; top: 50%; transform: translateY(-50%);
+  color: var(--text-muted); pointer-events: none;
+  font-size: 13px;
+}
+
+/* Sort */
+.sort-wrap { padding: 0 16px 8px; }
+.sort-select {
+  width: 100%; padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 12px;
+}
+.sort-select:focus { outline: none; border-color: var(--border-focus); }
+
+/* ============================================================
+   KPI CARDS
+   ============================================================ */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px; margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.25s, border-color 0.25s;
+}
+.kpi-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 700;
+  color: var(--text-primary); line-height: 1;
+}
+.kpi-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.kpi-card.accent .kpi-value { color: var(--accent); }
+.kpi-card.danger .kpi-value { color: var(--danger); }
+.kpi-card.success .kpi-value { color: var(--success); }
+.kpi-card.warning .kpi-value { color: var(--warning); }
+
+/* ============================================================
+   SECTION HEADER
+   ============================================================ */
+.section-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 700;
+  color: var(--text-primary); letter-spacing: -0.3px;
+}
+.section-count {
+  font-size: 11px; font-family: var(--font-mono);
+  background: var(--border); color: var(--text-muted);
+  padding: 2px 8px; border-radius: 99px;
+}
+.section-header .sep { flex: 1; }
+
+/* ============================================================
+   NEWS CARDS GRID
+   ============================================================ */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 14px;
+}
+.news-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: box-shadow 0.15s, border-color 0.15s, transform 0.12s;
+  display: flex; flex-direction: column; gap: 8px;
+  position: relative; overflow: hidden;
+}
+.news-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--border); border-radius: 3px 0 0 3px;
+  transition: background 0.15s;
+}
+.news-card:hover { box-shadow: var(--shadow-md); border-color: var(--accent); transform: translateY(-1px); }
+.news-card:hover::before { background: var(--accent); }
+.news-card.no-link { cursor: default; }
+.news-card.no-link:hover { transform: none; }
+.news-card-header { display: flex; align-items: flex-start; gap: 8px; }
+.news-card-tags { display: flex; flex-wrap: wrap; gap: 4px; flex-shrink: 0; }
+.tag {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 7px; border-radius: 99px;
+  white-space: nowrap;
+}
+.tag-type-competitor { background: var(--tag-competitor); color: #fff; }
+.tag-type-industry { background: var(--tag-industry); color: #fff; }
+.tag-type-media { background: var(--tag-media); color: #fff; }
+.tag-type-official { background: var(--tag-official); color: #fff; }
+.tag-type-linkedin { background: var(--tag-linkedin); color: #fff; }
+.tag-type-manual { background: var(--tag-manual); color: #fff; }
+.news-card-title {
+  font-size: 13px; font-weight: 600;
+  color: var(--text-primary); line-height: 1.45;
+  flex: 1;
+}
+.news-card-snippet {
+  font-size: 12px; color: var(--text-secondary);
+  line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.news-card-footer {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 2px;
+}
+.news-source {
+  font-size: 11px; font-weight: 600;
+  color: var(--text-muted); font-family: var(--font-mono);
+}
+.news-dot { color: var(--border); font-size: 10px; }
+.news-date {
+  font-size: 11px; color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+.news-card-companies { display: flex; flex-wrap: wrap; gap: 4px; }
+.company-tag {
+  font-size: 10px; padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--accent-light); color: var(--accent);
+  font-weight: 600;
+}
+.kw-tag {
+  font-size: 10px; padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(16,185,129,0.1); color: var(--success);
+  font-weight: 600;
+}
+.no-news {
+  grid-column: 1 / -1;
+  text-align: center; padding: 60px 20px;
+  color: var(--text-muted);
+}
+.no-news-icon { font-size: 40px; margin-bottom: 12px; }
+.no-news-msg { font-size: 15px; font-weight: 600; color: var(--text-secondary); }
+.no-news-sub { font-size: 12px; margin-top: 4px; }
+
+/* Loading skeleton */
+.skeleton-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px; min-height: 140px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.skel-line {
+  background: var(--border); border-radius: 4px; margin-bottom: 8px;
+}
+
+/* ============================================================
+   LOAD MORE
+   ============================================================ */
+.load-more-wrap { text-align: center; margin-top: 20px; }
+.btn-load-more {
+  padding: 8px 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 13px; font-weight: 500;
+  transition: all 0.15s;
+}
+.btn-load-more:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ============================================================
+   COMPETITOR LINKS SECTION
+   ============================================================ */
+.competitor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.competitor-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.25s;
+}
+.competitor-card-name {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 10px;
+}
+.competitor-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.btn-link {
+  display: flex; align-items: center; gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px; font-weight: 600;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  background: var(--bg);
+  transition: all 0.12s;
+}
+.btn-link:hover { border-color: var(--accent); color: var(--accent); }
+.btn-link.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.btn-link.linkedin { border-color: #0a66c2; color: #0a66c2; }
+.btn-link.linkedin:hover { background: rgba(10,102,194,0.08); }
+
+/* ============================================================
+   SOURCE STATUS SECTION
+   ============================================================ */
+.source-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 12px;
+}
+.source-table th {
+  text-align: left; padding: 8px 12px;
+  background: var(--bg-sidebar); border-bottom: 1px solid var(--border);
+  font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.source-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.source-table tr:last-child td { border-bottom: none; }
+.source-table tr:hover td { background: var(--bg-sidebar); }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 99px;
+  font-size: 10px; font-weight: 600;
+}
+.status-ok { background: rgba(26,158,92,0.12); color: var(--success); }
+.status-err { background: rgba(224,58,58,0.12); color: var(--danger); }
+.status-pending { background: rgba(217,119,6,0.12); color: var(--warning); }
+.status-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: currentColor;
+}
+.source-table-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   NOTICE BANNER
+   ============================================================ */
+.notice-banner {
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 11px; color: var(--text-secondary);
+  line-height: 1.6; margin-bottom: 20px;
+}
+.notice-banner strong { color: var(--accent); }
+
+/* ============================================================
+   TABS
+   ============================================================ */
+.tabs { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; }
+.tab-btn {
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 12px; font-weight: 500;
+  transition: all 0.12s;
+}
+.tab-btn:hover { border-color: var(--accent); color: var(--accent); }
+.tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.mb-6 { margin-bottom: 24px; }
+.mt-6 { margin-top: 24px; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.gap-2 { gap: 8px; }
+.text-muted { color: var(--text-muted); font-size: 12px; }
+.text-accent { color: var(--accent); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  .sidebar { width: 220px; }
+  .news-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+}
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .header-title { font-size: 13px; }
+  .main { padding: 16px; }
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .news-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   SCROLLABLE SIDEBAR KEYWORD SECTION
+   ============================================================ */
+.sidebar-tags-scroll {
+  max-height: 180px; overflow-y: auto;
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="header">
+  <div class="header-brand">
+    <div class="header-logo">K</div>
+    <span class="header-title">KAON <span>News</span> Dashboard</span>
+  </div>
+  <div class="header-sep"></div>
+  <span class="header-meta" id="lastUpdate">Last updated: <strong>—</strong></span>
+  <div class="header-actions">
+    <button class="btn-refresh" id="refreshBtn" onclick="refreshAll()">
+      <svg id="refreshIcon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <polyline points="1 20 1 14 7 14"></polyline>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+      </svg>
+      Refresh
+    </button>
+    <button class="btn-icon" onclick="toggleDarkMode()" title="Toggle dark mode" id="themeBtn">🌙</button>
+  </div>
+</header>
+
+<!-- ============================================================
+     LAYOUT
+     ============================================================ -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <!-- Search -->
+    <div class="search-wrap">
+      <div class="search-wrap-inner">
+        <span class="search-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search articles..." oninput="applyFilters()">
+      </div>
+    </div>
+
+    <!-- Sort -->
+    <div class="sort-wrap">
+      <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+      </select>
+    </div>
+
+    <!-- Category Nav -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Category</div>
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" onclick="setFilter('all', this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          All News <span class="count" id="cnt-all">0</span>
+        </button>
+        <button class="nav-btn" onclick="setFilter('competitor', this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Competitor News <span class="count" id="cnt-competitor">0</span>
+        </button>
+        <button class="nav-btn" onclick="setFilter('industry', this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          Industry News <span class="count" id="cnt-industry">0</span>
+        </button>
+        <button class="nav-btn" onclick="setFilter('media', this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+          Industry Media <span class="count" id="cnt-media">0</span>
+        </button>
+        <button class="nav-btn" onclick="setFilter('linkedin', this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+          LinkedIn Posts <span class="count" id="cnt-linkedin">0</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- Companies -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Companies</div>
+      <div class="sidebar-tags" id="companyFilters"></div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- Keywords -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Keywords</div>
+      <div class="sidebar-tags sidebar-tags-scroll" id="keywordFilters"></div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- Notice Banner -->
+    <div class="notice-banner">
+      <strong>ℹ️ Data Sources:</strong> This dashboard collects news from RSS-enabled sources and Google News RSS.
+      Some official websites and LinkedIn pages may not support automatic collection due to CORS, login, or API restrictions.
+      For LinkedIn updates, use the configured company links or add posts manually in the <code>manualLinkedInPosts</code> array.
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card accent"><div class="kpi-label">Total Articles</div><div class="kpi-value" id="kpi-total">0</div><div class="kpi-sub">All sources</div></div>
+      <div class="kpi-card"><div class="kpi-label">Competitor</div><div class="kpi-value" id="kpi-competitor">0</div><div class="kpi-sub">articles</div></div>
+      <div class="kpi-card"><div class="kpi-label">Industry</div><div class="kpi-value" id="kpi-industry">0</div><div class="kpi-sub">articles</div></div>
+      <div class="kpi-card success"><div class="kpi-label">Today</div><div class="kpi-value" id="kpi-today">0</div><div class="kpi-sub">new articles</div></div>
+      <div class="kpi-card warning"><div class="kpi-label">LinkedIn</div><div class="kpi-value" id="kpi-linkedin">0</div><div class="kpi-sub">manual posts</div></div>
+      <div class="kpi-card danger"><div class="kpi-label">Failed</div><div class="kpi-value" id="kpi-failed">0</div><div class="kpi-sub">sources</div></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('news', this)">📰 News Feed</button>
+      <button class="tab-btn" onclick="switchTab('competitors', this)">🏢 Competitor Channels</button>
+      <button class="tab-btn" onclick="switchTab('status', this)">📡 Source Status</button>
+    </div>
+
+    <!-- TAB: News Feed -->
+    <div class="tab-panel active" id="tab-news">
+      <div class="section-header">
+        <span class="section-title">News Feed</span>
+        <span class="section-count" id="newsCount">0 articles</span>
+        <span class="sep"></span>
+      </div>
+      <div class="news-grid" id="newsGrid">
+        <!-- Skeleton loaders -->
+        <div class="skeleton-card"><div class="skel-line" style="height:12px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:16px;width:90%"></div><div class="skel-line" style="height:16px;width:75%"></div><div class="skel-line" style="height:12px;width:55%;margin-top:12px"></div></div>
+        <div class="skeleton-card"><div class="skel-line" style="height:12px;width:35%;margin-bottom:12px"></div><div class="skel-line" style="height:16px;width:85%"></div><div class="skel-line" style="height:16px;width:70%"></div><div class="skel-line" style="height:12px;width:50%;margin-top:12px"></div></div>
+        <div class="skeleton-card"><div class="skel-line" style="height:12px;width:45%;margin-bottom:12px"></div><div class="skel-line" style="height:16px;width:80%"></div><div class="skel-line" style="height:16px;width:65%"></div><div class="skel-line" style="height:12px;width:60%;margin-top:12px"></div></div>
+      </div>
+      <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+        <button class="btn-load-more" onclick="loadMore()">Load more articles</button>
+      </div>
+    </div>
+
+    <!-- TAB: Competitor Channels -->
+    <div class="tab-panel" id="tab-competitors">
+      <div class="section-header">
+        <span class="section-title">Competitor Official Channels</span>
+      </div>
+      <div class="competitor-grid" id="competitorGrid"></div>
+    </div>
+
+    <!-- TAB: Source Status -->
+    <div class="tab-panel" id="tab-status">
+      <div class="section-header">
+        <span class="section-title">Data Source Status</span>
+      </div>
+      <div class="source-table-wrap">
+        <table class="source-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Articles</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="sourceTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+/* ==============================================================
+   ① CONFIGURATION — Edit here to add/remove sources and queries
+   ============================================================== */
+
+// rss2json.com API key (leave empty for free tier usage)
+const RSS2JSON_API_KEY = "";
+
+// Maximum total articles to store in memory
+const MAX_ARTICLES = 500;
+
+// How many cards to show per render page
+const CARDS_PER_PAGE = 30;
+
+/* ---------------------------------------------------------------
+   Industry media sources (RSS preferred)
+   --------------------------------------------------------------- */
+const industrySources = [
+  {
+    name: "Wi-Fi NOW",
+    url: "https://wifinowglobal.com/news/",
+    rssUrl: "https://wifinowglobal.com/feed/",
+    category: "Wi-Fi / Broadband",
+    enabled: true
+  },
+  {
+    name: "TelecomTV",
+    url: "https://www.telecomtv.com/content/news/",
+    rssUrl: "https://www.telecomtv.com/content/news/rss/",
+    category: "Telecom / Broadband",
+    enabled: true
+  },
+  {
+    name: "Broadband TV News",
+    url: "https://www.broadbandtvnews.com/",
+    rssUrl: "https://www.broadbandtvnews.com/feed/",
+    category: "Broadband / TV",
+    enabled: true
+  },
+  {
+    name: "Advanced Television",
+    url: "https://advanced-television.com/",
+    rssUrl: "https://advanced-television.com/feed/",
+    category: "Television / Broadband",
+    enabled: true
+  },
+  {
+    name: "Light Reading",
+    url: "https://www.lightreading.com/network-technology/broadband",
+    rssUrl: "https://www.lightreading.com/rss.xml",
+    category: "Network / Broadband",
+    enabled: true
+  },
+  {
+    name: "RCR Wireless",
+    url: "https://www.rcrwireless.com/",
+    rssUrl: "https://www.rcrwireless.com/feed",
+    category: "Wireless / Telecom",
+    enabled: true
+  },
+  {
+    name: "Fierce Network",
+    url: "https://www.fierce-network.com/",
+    rssUrl: "https://www.fiercetelecom.com/rss.xml",
+    category: "Telecom / Network",
+    enabled: true
+  }
+];
+
+/* ---------------------------------------------------------------
+   Competitor official channels
+   --------------------------------------------------------------- */
+const competitorSources = [
+  { company: "Sagemcom",        officialWebsite: "https://www.sagemcom.com",           newsUrl: "https://www.sagemcom.com/en/news",                   rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/sagemcom/",         enabled: true },
+  { company: "Vantiva",         officialWebsite: "https://www.vantiva.com",             newsUrl: "https://www.vantiva.com/news/",                       rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/vantiva/",           enabled: true },
+  { company: "CommScope",       officialWebsite: "https://www.commscope.com",           newsUrl: "https://www.commscope.com/news-events/press-releases/",rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/commscope/",         enabled: true },
+  { company: "SDMC Technology", officialWebsite: "https://www.sdmctech.com",            newsUrl: "https://www.sdmctech.com/news/",                      rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/sdmc-technology/",   enabled: true },
+  { company: "Strong/Skyworth", officialWebsite: "https://www.skyworth.com",            newsUrl: "https://www.skyworth.com/en/news/",                   rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/skyworth-digital/",  enabled: true },
+  { company: "ZTE",             officialWebsite: "https://www.zte.com.cn/global/",      newsUrl: "https://www.zte.com.cn/global/about/press-center/",   rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/zte-corporation/",   enabled: true },
+  { company: "SEI Robotics",    officialWebsite: "https://www.seirobotics.com",         newsUrl: "https://www.seirobotics.com/news/",                   rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/sei-robotics/",      enabled: true },
+  { company: "Zyxel",           officialWebsite: "https://www.zyxel.com",               newsUrl: "https://www.zyxel.com/us/en/news.shtml",              rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/zyxel-networks/",    enabled: true },
+  { company: "Huawei",          officialWebsite: "https://www.huawei.com",              newsUrl: "https://www.huawei.com/en/news",                      rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/huawei/",            enabled: true },
+  { company: "Hitron",          officialWebsite: "https://www.hitron.com",              newsUrl: "https://www.hitron.com/news/",                        rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/hitron-technologies/",enabled: true },
+  { company: "Sercomm",         officialWebsite: "https://www.sercomm.com",             newsUrl: "https://www.sercomm.com/news.html",                   rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/sercomm-corp/",      enabled: true },
+  { company: "Humax Networks",  officialWebsite: "https://networks.humax.co.kr",        newsUrl: "https://networks.humax.co.kr/en/news/",               rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/humax-networks/",    enabled: true },
+  { company: "Gemtek",          officialWebsite: "https://www.gemtek.com",              newsUrl: "https://www.gemtek.com/news",                         rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/gemtek-technology/", enabled: true },
+  { company: "Innopia",         officialWebsite: "https://www.innopia.com",             newsUrl: "https://www.innopia.com/news/",                       rssUrl: "",  linkedinUrl: "https://www.linkedin.com/company/innopia-technologies/",enabled: true }
+];
+
+/* ---------------------------------------------------------------
+   Google News RSS search queries
+   --------------------------------------------------------------- */
+const googleNewsQueries = [
+  // Competitor-specific queries
+  { query: "Sagemcom STB",            type: "competitor", company: "Sagemcom",        keyword: "STB",              enabled: true },
+  { query: "Sagemcom broadband",      type: "competitor", company: "Sagemcom",        keyword: "Broadband CPE",    enabled: true },
+  { query: "Vantiva set-top box",     type: "competitor", company: "Vantiva",         keyword: "Set-top Box",      enabled: true },
+  { query: "Vantiva broadband CPE",   type: "competitor", company: "Vantiva",         keyword: "Broadband CPE",    enabled: true },
+  { query: "CommScope cable modem",   type: "competitor", company: "CommScope",       keyword: "Cable Modem",      enabled: true },
+  { query: "CommScope broadband",     type: "competitor", company: "CommScope",       keyword: "Broadband CPE",    enabled: true },
+  { query: "ZTE XGS-PON",            type: "competitor", company: "ZTE",             keyword: "XGS-PON",          enabled: true },
+  { query: "Huawei 5G FWA",          type: "competitor", company: "Huawei",          keyword: "5G FWA",           enabled: true },
+  { query: "SDMC Android TV",        type: "competitor", company: "SDMC Technology", keyword: "Android TV",       enabled: true },
+  { query: "SEI Robotics set-top box",type: "competitor", company: "SEI Robotics",   keyword: "Set-top Box",      enabled: true },
+  { query: "Zyxel Wi-Fi 7 router",   type: "competitor", company: "Zyxel",           keyword: "Wi-Fi 7 Router",   enabled: true },
+  { query: "Hitron cable gateway",    type: "competitor", company: "Hitron",          keyword: "Cable Gateway",    enabled: true },
+  { query: "Sercomm broadband CPE",   type: "competitor", company: "Sercomm",         keyword: "Broadband CPE",    enabled: true },
+  { query: "Humax Networks gateway",  type: "competitor", company: "Humax Networks",  keyword: "Home Gateway",     enabled: true },
+  { query: "Gemtek FWA",             type: "competitor", company: "Gemtek",          keyword: "5G FWA",           enabled: true },
+  { query: "Innopia STB",            type: "competitor", company: "Innopia",         keyword: "STB",              enabled: true },
+  // Industry keyword queries
+  { query: "Wi-Fi 7 broadband gateway", type: "industry", company: "", keyword: "Wi-Fi 7 Router",  enabled: true },
+  { query: "XGS-PON ONT broadband",     type: "industry", company: "", keyword: "XGS-PON",         enabled: true },
+  { query: "5G FWA fixed wireless",     type: "industry", company: "", keyword: "5G FWA",           enabled: true },
+  { query: "Set-top box operator platform", type: "industry", company: "", keyword: "Set-top Box",  enabled: true },
+  { query: "DOCSIS cable modem",        type: "industry", company: "", keyword: "DOCSIS",           enabled: true },
+  { query: "Android TV streaming device",   type: "industry", company: "", keyword: "Android TV",   enabled: true },
+  { query: "Mesh Wi-Fi home network",   type: "industry", company: "", keyword: "Mesh Wi-Fi",       enabled: true },
+  { query: "fiber broadband ONT GPON",  type: "industry", company: "", keyword: "GPON",             enabled: true }
+];
+
+/* ---------------------------------------------------------------
+   Manual LinkedIn posts — add entries here to display them
+   --------------------------------------------------------------- */
+const manualLinkedInPosts = [
+  // Example (uncomment and fill in to use):
+  // {
+  //   title: "Sagemcom announces new Wi-Fi 7 gateway lineup at CES 2025",
+  //   company: "Sagemcom",
+  //   source: "LinkedIn",
+  //   publishedAt: "2025-01-10T09:00:00",
+  //   url: "https://www.linkedin.com/posts/sagemcom_example",
+  //   summary: "Sagemcom shared their new CPE roadmap including Wi-Fi 7 gateways targeting operator deployments.",
+  //   category: "Competitor Update"
+  // }
+];
+
+/* ---------------------------------------------------------------
+   Industry keywords for auto-tag detection
+   --------------------------------------------------------------- */
+const INDUSTRY_KEYWORDS = [
+  "Set-top Box","STB","Android TV","Streaming Device","Broadband CPE","AP Router",
+  "Wi-Fi Router","Wi-Fi 7","AP Repeater","Wi-Fi Repeater","Mesh Wi-Fi","XGS-PON",
+  "GPON","Cable Gateway","Cable Modem","DOCSIS","ONT","VDSL","5G FWA",
+  "Fixed Wireless Access","Fiber Broadband","Home Gateway","Operator CPE"
+];
+
+/* ---------------------------------------------------------------
+   Competitor names for auto-tag detection
+   --------------------------------------------------------------- */
+const COMPETITOR_NAMES = competitorSources.map(c => c.company);
+
+/* ==============================================================
+   ② APPLICATION STATE
+   ============================================================== */
+let allArticles = [];       // Normalized article objects
+let filteredArticles = [];  // After filtering/sorting
+let displayedCount = CARDS_PER_PAGE;
+let activeFilter = "all";   // Category filter
+let activeCompany = "";     // Company filter
+let activeKeyword = "";     // Keyword filter
+let sourceStatuses = [];    // Fetch status per source
+
+/* ==============================================================
+   ③ UTILITY FUNCTIONS
+   ============================================================== */
+
+/** Build rss2json proxy URL */
+function buildRss2JsonUrl(rssUrl) {
+  const base = "https://api.rss2json.com/v1/api.json";
+  const params = new URLSearchParams({ rss_url: rssUrl });
+  if (RSS2JSON_API_KEY) params.append("api_key", RSS2JSON_API_KEY);
+  return `${base}?${params.toString()}`;
+}
+
+/** Build Google News RSS URL */
+function buildGoogleNewsRssUrl(query) {
+  const encoded = encodeURIComponent(query);
+  return `https://news.google.com/rss/search?q=${encoded}&hl=en-US&gl=US&ceid=US:en`;
+}
+
+/** Format date string for display */
+function formatDate(dateStr) {
+  if (!dateStr) return "Date not available";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return "Date not available";
+    const now = new Date();
+    const diffMs = now - d;
+    const diffH = Math.floor(diffMs / 3600000);
+    const diffD = Math.floor(diffMs / 86400000);
+    if (diffH < 1) return "Just now";
+    if (diffH < 24) return `${diffH}h ago`;
+    if (diffD < 7) return `${diffD}d ago`;
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  } catch { return "Date not available"; }
+}
+
+/** Check if an article was published today */
+function isToday(dateStr) {
+  if (!dateStr) return false;
+  try {
+    const d = new Date(dateStr);
+    const now = new Date();
+    return d.toDateString() === now.toDateString();
+  } catch { return false; }
+}
+
+/** Detect competitor company tags from title + snippet */
+function detectCompanyTags(text) {
+  if (!text) return [];
+  const found = [];
+  COMPETITOR_NAMES.forEach(name => {
+    // Handle "Strong/Skyworth" by also checking partial names
+    const parts = name.split("/").map(p => p.trim());
+    if (parts.some(p => text.toLowerCase().includes(p.toLowerCase()))) {
+      if (!found.includes(name)) found.push(name);
+    }
+  });
+  return found;
+}
+
+/** Detect industry keyword tags from title + snippet */
+function detectIndustryTags(text) {
+  if (!text) return [];
+  const found = [];
+  INDUSTRY_KEYWORDS.forEach(kw => {
+    if (text.toLowerCase().includes(kw.toLowerCase())) {
+      if (!found.includes(kw)) found.push(kw);
+    }
+  });
+  return found.slice(0, 4); // cap at 4 tags
+}
+
+/** Normalize a raw RSS item into standard article format */
+function normalizeArticle(item, meta) {
+  const title   = item.title   || item.Title || "";
+  const url     = item.link    || item.Link  || item.url || "";
+  const snippet = item.description || item.content || item.summary || item.Description || "";
+  const clean   = snippet.replace(/<[^>]*>/g, "").trim().substring(0, 200);
+  const pubDate = item.pubDate || item.published || item.isoDate || item.date || "";
+
+  const fullText = `${title} ${clean}`;
+  const detectedCompanies = detectCompanyTags(fullText);
+  const detectedKeywords  = detectIndustryTags(fullText);
+
+  // Merge detected companies with explicitly tagged ones
+  const companies = [...new Set([...(meta.companies || []), ...detectedCompanies])];
+  const keywords  = [...new Set([...(meta.keywords  || []), ...detectedKeywords ])];
+
+  return {
+    id:          btoa(encodeURIComponent(url || title)).substring(0, 24),
+    title,
+    url,
+    snippet:     clean,
+    source:      meta.source   || "Unknown",
+    publishedAt: pubDate,
+    type:        meta.type     || "industry",   // competitor | industry | media | linkedin
+    companies,
+    keywords,
+    category:    meta.category || ""
+  };
+}
+
+/** Deduplicate articles by URL then by title */
+function mergeAndDeduplicateArticles(articles) {
+  const seenUrls   = new Set();
+  const seenTitles = new Set();
+  return articles.filter(a => {
+    const normTitle = a.title.toLowerCase().trim().substring(0, 60);
+    if (a.url && seenUrls.has(a.url)) return false;
+    if (seenTitles.has(normTitle))    return false;
+    if (a.url) seenUrls.add(a.url);
+    seenTitles.add(normTitle);
+    return true;
+  });
+}
+
+/* ==============================================================
+   ④ DATA FETCHING FUNCTIONS
+   ============================================================== */
+
+/** Fetch a single RSS feed via rss2json proxy */
+async function fetchRssFeed(source, meta) {
+  const rssUrl = source.rssUrl;
+  if (!rssUrl) return [];
+  const apiUrl = buildRss2JsonUrl(rssUrl);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000); // 8s timeout
+  try {
+    const res  = await fetch(apiUrl, { signal: controller.signal });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    if (json.status !== "ok") throw new Error(json.message || "RSS error");
+    const items = (json.items || []).slice(0, 20);
+    return items.map(item => normalizeArticle(item, meta));
+  } catch (err) {
+    clearTimeout(timer);
+    throw err;
+  }
+}
+
+/** Fetch Google News RSS for a given query */
+async function fetchGoogleNews(queryObj) {
+  const rssUrl = buildGoogleNewsRssUrl(queryObj.query);
+  const apiUrl = buildRss2JsonUrl(rssUrl);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res  = await fetch(apiUrl, { signal: controller.signal });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    if (json.status !== "ok") throw new Error(json.message || "RSS error");
+    const items = (json.items || []).slice(0, 10);
+    const meta = {
+      source:    queryObj.query,
+      type:      queryObj.type === "competitor" ? "competitor" : "industry",
+      companies: queryObj.company ? [queryObj.company] : [],
+      keywords:  queryObj.keyword ? [queryObj.keyword] : [],
+      category:  "Google News"
+    };
+    return items.map(item => normalizeArticle(item, meta));
+  } catch (err) {
+    clearTimeout(timer);
+    throw err;
+  }
+}
+
+/** Fetch all news from all enabled sources */
+async function fetchAllNews() {
+  allArticles = [];
+  sourceStatuses = [];
+  displayedCount = CARDS_PER_PAGE;
+
+  showLoading();
+  updateRefreshBtn(true);
+
+  const tasks = [];
+
+  // 1) Industry media sources
+  industrySources.filter(s => s.enabled && s.rssUrl).forEach(src => {
+    const meta = {
+      source:   src.name,
+      type:     "media",
+      category: src.category,
+      companies: [],
+      keywords:  []
+    };
+    tasks.push(
+      fetchRssFeed(src, meta)
+        .then(articles => {
+          sourceStatuses.push({ name: src.name, type: "Industry Media", status: "ok", count: articles.length, error: "" });
+          return articles;
+        })
+        .catch(err => {
+          sourceStatuses.push({ name: src.name, type: "Industry Media", status: "error", count: 0, error: err.message });
+          return [];
+        })
+    );
+  });
+
+  // 2) Competitor RSS feeds (if any configured)
+  competitorSources.filter(s => s.enabled && s.rssUrl).forEach(src => {
+    const meta = {
+      source:    src.company,
+      type:      "competitor",
+      companies: [src.company],
+      keywords:  [],
+      category:  "Official Website"
+    };
+    tasks.push(
+      fetchRssFeed(src, meta)
+        .then(articles => {
+          sourceStatuses.push({ name: src.company + " RSS", type: "Competitor RSS", status: "ok", count: articles.length, error: "" });
+          return articles;
+        })
+        .catch(err => {
+          sourceStatuses.push({ name: src.company + " RSS", type: "Competitor RSS", status: "error", count: 0, error: err.message });
+          return [];
+        })
+    );
+  });
+
+  // 3) Google News queries (enabled ones)
+  googleNewsQueries.filter(q => q.enabled).forEach(queryObj => {
+    tasks.push(
+      fetchGoogleNews(queryObj)
+        .then(articles => {
+          sourceStatuses.push({ name: `GNews: "${queryObj.query}"`, type: "Google News", status: "ok", count: articles.length, error: "" });
+          return articles;
+        })
+        .catch(err => {
+          sourceStatuses.push({ name: `GNews: "${queryObj.query}"`, type: "Google News", status: "error", count: 0, error: err.message });
+          return [];
+        })
+    );
+  });
+
+  // 4) Manual LinkedIn posts
+  const linkedinArticles = manualLinkedInPosts.map(post => ({
+    id:          btoa(encodeURIComponent(post.url || post.title)).substring(0, 24),
+    title:       post.title,
+    url:         post.url,
+    snippet:     post.summary || "",
+    source:      "LinkedIn",
+    publishedAt: post.publishedAt,
+    type:        "linkedin",
+    companies:   post.company ? [post.company] : [],
+    keywords:    [],
+    category:    post.category || "LinkedIn Manual Post"
+  }));
+  if (linkedinArticles.length > 0) {
+    sourceStatuses.push({ name: "LinkedIn (Manual)", type: "LinkedIn", status: "ok", count: linkedinArticles.length, error: "" });
+  }
+
+  // Run all fetch tasks in parallel
+  const results = await Promise.allSettled(tasks);
+  const fetchedArticles = results.flatMap(r => r.status === "fulfilled" ? r.value : []);
+
+  // Merge everything
+  const combined = [...fetchedArticles, ...linkedinArticles];
+  allArticles = mergeAndDeduplicateArticles(combined).slice(0, MAX_ARTICLES);
+
+  // Persist update time
+  const now = new Date().toISOString();
+  localStorage.setItem("kaon_lastUpdate", now);
+
+  updateRefreshBtn(false);
+  updateLastUpdated(now);
+  applyFilters();
+  renderSummaryCards();
+  renderSourceStatus();
+  renderCompetitorLinks();
+  buildSidebarFilters();
+}
+
+/* ==============================================================
+   ⑤ RENDER FUNCTIONS
+   ============================================================== */
+
+function showLoading() {
+  const grid = document.getElementById("newsGrid");
+  grid.innerHTML = [1,2,3,4,5,6].map(() => `
+    <div class="skeleton-card">
+      <div class="skel-line" style="height:11px;width:38%;margin-bottom:12px"></div>
+      <div class="skel-line" style="height:15px;width:92%"></div>
+      <div class="skel-line" style="height:15px;width:76%"></div>
+      <div class="skel-line" style="height:11px;width:52%;margin-top:14px"></div>
+    </div>`).join("");
+}
+
+function renderSummaryCards() {
+  const total      = allArticles.length;
+  const competitor = allArticles.filter(a => a.type === "competitor").length;
+  const industry   = allArticles.filter(a => a.type === "industry" || a.type === "media").length;
+  const today      = allArticles.filter(a => isToday(a.publishedAt)).length;
+  const linkedin   = allArticles.filter(a => a.type === "linkedin").length;
+  const failed     = sourceStatuses.filter(s => s.status === "error").length;
+
+  document.getElementById("kpi-total").textContent      = total;
+  document.getElementById("kpi-competitor").textContent = competitor;
+  document.getElementById("kpi-industry").textContent   = industry;
+  document.getElementById("kpi-today").textContent      = today;
+  document.getElementById("kpi-linkedin").textContent   = linkedin;
+  document.getElementById("kpi-failed").textContent     = failed;
+}
+
+function renderNewsCards() {
+  const grid = document.getElementById("newsGrid");
+  const count = document.getElementById("newsCount");
+  const loadMoreWrap = document.getElementById("loadMoreWrap");
+
+  const slice = filteredArticles.slice(0, displayedCount);
+
+  if (filteredArticles.length === 0) {
+    grid.innerHTML = `
+      <div class="no-news">
+        <div class="no-news-icon">📭</div>
+        <div class="no-news-msg">No articles found</div>
+        <div class="no-news-sub">Try adjusting filters or refresh to fetch latest news</div>
+      </div>`;
+    loadMoreWrap.style.display = "none";
+    count.textContent = "0 articles";
+    return;
+  }
+
+  count.textContent = `${filteredArticles.length} articles`;
+  grid.innerHTML = slice.map(a => buildCardHTML(a)).join("");
+
+  loadMoreWrap.style.display = displayedCount < filteredArticles.length ? "block" : "none";
+}
+
+function buildCardHTML(a) {
+  const typeClass = {
+    competitor: "tag-type-competitor",
+    industry:   "tag-type-industry",
+    media:      "tag-type-media",
+    official:   "tag-type-official",
+    linkedin:   "tag-type-linkedin"
+  }[a.type] || "tag-type-industry";
+
+  const typeLabel = {
+    competitor: "Competitor",
+    industry:   "Industry",
+    media:      "Industry Media",
+    official:   "Official",
+    linkedin:   "LinkedIn"
+  }[a.type] || "News";
+
+  const companyTags = a.companies.slice(0, 3).map(c =>
+    `<span class="company-tag">${escHtml(c)}</span>`).join("");
+  const kwTags = a.keywords.slice(0, 3).map(k =>
+    `<span class="kw-tag">${escHtml(k)}</span>`).join("");
+
+  const noLink = !a.url ? " no-link" : "";
+  const onclick = a.url ? `onclick="openArticle('${escAttr(a.url)}')"` : "";
+
+  return `
+  <div class="news-card${noLink}" ${onclick}>
+    <div class="news-card-header">
+      <span class="tag ${typeClass}">${typeLabel}</span>
+    </div>
+    <div class="news-card-title">${escHtml(a.title) || "(No title)"}</div>
+    ${a.snippet ? `<div class="news-card-snippet">${escHtml(a.snippet)}</div>` : ""}
+    ${(companyTags || kwTags) ? `<div class="news-card-companies">${companyTags}${kwTags}</div>` : ""}
+    <div class="news-card-footer">
+      <span class="news-source">${escHtml(a.source)}</span>
+      <span class="news-dot">·</span>
+      <span class="news-date">${formatDate(a.publishedAt)}</span>
+    </div>
+  </div>`;
+}
+
+function renderCompetitorLinks() {
+  const grid = document.getElementById("competitorGrid");
+  grid.innerHTML = competitorSources.map(src => {
+    const webBtn  = buildLinkBtn("🌐 Website", src.officialWebsite, "");
+    const newsBtn = buildLinkBtn("📰 News", src.newsUrl, "");
+    const liBtn   = buildLinkBtn("in LinkedIn", src.linkedinUrl, "linkedin");
+    return `
+    <div class="competitor-card">
+      <div class="competitor-card-name">${escHtml(src.company)}</div>
+      <div class="competitor-links">${webBtn}${newsBtn}${liBtn}</div>
+    </div>`;
+  }).join("");
+}
+
+function buildLinkBtn(label, url, extra) {
+  if (!url) {
+    return `<button class="btn-link disabled" title="URL not configured">${label}</button>`;
+  }
+  return `<a href="${escAttr(url)}" target="_blank" rel="noopener noreferrer" class="btn-link ${extra}">${label}</a>`;
+}
+
+function renderSourceStatus() {
+  const tbody = document.getElementById("sourceTableBody");
+  if (sourceStatuses.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-muted)">No source data yet. Click Refresh to load.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = sourceStatuses.map(s => {
+    const badge = s.status === "ok"
+      ? `<span class="status-badge status-ok"><span class="status-dot"></span>OK</span>`
+      : s.status === "pending"
+        ? `<span class="status-badge status-pending"><span class="status-dot"></span>Loading</span>`
+        : `<span class="status-badge status-err"><span class="status-dot"></span>Error</span>`;
+    return `
+    <tr>
+      <td style="font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(s.name)}</td>
+      <td style="color:var(--text-muted)">${escHtml(s.type)}</td>
+      <td>${badge}</td>
+      <td style="font-family:var(--font-mono)">${s.count}</td>
+      <td style="color:var(--danger);font-size:11px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(s.error || "—")}</td>
+    </tr>`;
+  }).join("");
+}
+
+function buildSidebarFilters() {
+  // Company counts
+  const companyCounts = {};
+  allArticles.forEach(a => a.companies.forEach(c => {
+    companyCounts[c] = (companyCounts[c] || 0) + 1;
+  }));
+  const companyDiv = document.getElementById("companyFilters");
+  companyDiv.innerHTML = COMPETITOR_NAMES.map(name => {
+    const cnt = companyCounts[name] || 0;
+    const active = activeCompany === name ? " active" : "";
+    return `<button class="tag-btn${active}" onclick="setCompanyFilter('${escAttr(name)}', this)">
+      <span class="tag-dot"></span>${escHtml(name)}<span class="count">${cnt}</span>
+    </button>`;
+  }).join("");
+
+  // Keyword counts
+  const kwCounts = {};
+  allArticles.forEach(a => a.keywords.forEach(k => {
+    kwCounts[k] = (kwCounts[k] || 0) + 1;
+  }));
+  const kwDiv = document.getElementById("keywordFilters");
+  const sortedKw = INDUSTRY_KEYWORDS
+    .filter(k => kwCounts[k])
+    .sort((a, b) => (kwCounts[b] || 0) - (kwCounts[a] || 0));
+  kwDiv.innerHTML = sortedKw.map(kw => {
+    const cnt = kwCounts[kw] || 0;
+    const active = activeKeyword === kw ? " active" : "";
+    return `<button class="tag-btn${active}" onclick="setKeywordFilter('${escAttr(kw)}', this)">
+      <span class="tag-dot" style="background:var(--success)"></span>${escHtml(kw)}<span class="count">${cnt}</span>
+    </button>`;
+  }).join("");
+
+  // Sidebar category counts
+  const counts = {
+    all:        allArticles.length,
+    competitor: allArticles.filter(a => a.type === "competitor").length,
+    industry:   allArticles.filter(a => a.type === "industry").length,
+    media:      allArticles.filter(a => a.type === "media").length,
+    linkedin:   allArticles.filter(a => a.type === "linkedin").length
+  };
+  Object.entries(counts).forEach(([k, v]) => {
+    const el = document.getElementById(`cnt-${k}`);
+    if (el) el.textContent = v;
+  });
+}
+
+/* ==============================================================
+   ⑥ FILTER, SORT, SEARCH
+   ============================================================== */
+
+function applyFilters() {
+  const search = (document.getElementById("searchInput").value || "").toLowerCase().trim();
+  const sort   = document.getElementById("sortSelect").value;
+
+  let result = allArticles.filter(a => {
+    // Category filter
+    if (activeFilter === "competitor" && a.type !== "competitor") return false;
+    if (activeFilter === "industry"   && a.type !== "industry")   return false;
+    if (activeFilter === "media"      && a.type !== "media")      return false;
+    if (activeFilter === "linkedin"   && a.type !== "linkedin")   return false;
+    // Company filter
+    if (activeCompany && !a.companies.includes(activeCompany)) return false;
+    // Keyword filter
+    if (activeKeyword && !a.keywords.includes(activeKeyword)) return false;
+    // Search
+    if (search) {
+      const hay = `${a.title} ${a.snippet} ${a.source} ${a.companies.join(" ")} ${a.keywords.join(" ")}`.toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  // Sort
+  result = sortArticles(result, sort);
+
+  filteredArticles = result;
+  displayedCount = CARDS_PER_PAGE;
+  renderNewsCards();
+}
+
+function sortArticles(articles, order) {
+  return [...articles].sort((a, b) => {
+    const da = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+    const db = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+    if (isNaN(da) && isNaN(db)) return 0;
+    if (isNaN(da)) return 1;
+    if (isNaN(db)) return -1;
+    return order === "oldest" ? da - db : db - da;
+  });
+}
+
+function setFilter(filter, btn) {
+  activeFilter  = filter;
+  activeCompany = "";
+  activeKeyword = "";
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll(".tag-btn").forEach(b => b.classList.remove("active"));
+  applyFilters();
+}
+
+function setCompanyFilter(company, btn) {
+  if (activeCompany === company) {
+    activeCompany = "";
+    btn.classList.remove("active");
+  } else {
+    activeCompany = company;
+    document.querySelectorAll("#companyFilters .tag-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  }
+  activeFilter = "all";
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  document.querySelector(".nav-btn").classList.add("active");
+  applyFilters();
+}
+
+function setKeywordFilter(kw, btn) {
+  if (activeKeyword === kw) {
+    activeKeyword = "";
+    btn.classList.remove("active");
+  } else {
+    activeKeyword = kw;
+    document.querySelectorAll("#keywordFilters .tag-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  }
+  activeFilter = "all";
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  document.querySelector(".nav-btn").classList.add("active");
+  applyFilters();
+}
+
+function loadMore() {
+  displayedCount += CARDS_PER_PAGE;
+  renderNewsCards();
+}
+
+/* ==============================================================
+   ⑦ TAB SWITCHING
+   ============================================================== */
+function switchTab(name, btn) {
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  btn.classList.add("active");
+  const panel = document.getElementById(`tab-${name}`);
+  if (panel) panel.classList.add("active");
+}
+
+/* ==============================================================
+   ⑧ DARK MODE
+   ============================================================== */
+function toggleDarkMode() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute("data-theme") === "dark";
+  const next = isDark ? "light" : "dark";
+  html.setAttribute("data-theme", next);
+  localStorage.setItem("kaon_theme", next);
+  document.getElementById("themeBtn").textContent = next === "dark" ? "☀️" : "🌙";
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem("kaon_theme") || "light";
+  document.documentElement.setAttribute("data-theme", saved);
+  document.getElementById("themeBtn").textContent = saved === "dark" ? "☀️" : "🌙";
+}
+
+/* ==============================================================
+   ⑨ MISC UI HELPERS
+   ============================================================== */
+function openArticle(url) {
+  if (url) window.open(url, "_blank", "noopener,noreferrer");
+}
+
+function updateRefreshBtn(loading) {
+  const btn  = document.getElementById("refreshBtn");
+  const icon = document.getElementById("refreshIcon");
+  if (loading) { btn.classList.add("loading"); btn.disabled = true; }
+  else          { btn.classList.remove("loading"); btn.disabled = false; }
+}
+
+function updateLastUpdated(isoStr) {
+  const el = document.getElementById("lastUpdate");
+  if (!el) return;
+  try {
+    const d = new Date(isoStr);
+    el.innerHTML = `Last updated: <strong>${d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })} — ${d.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</strong>`;
+  } catch { /* ignore */ }
+}
+
+function escHtml(str) {
+  if (!str) return "";
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function escAttr(str) {
+  if (!str) return "";
+  return String(str).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+}
+
+/* ==============================================================
+   ⑩ REFRESH WRAPPER
+   ============================================================== */
+async function refreshAll() {
+  await fetchAllNews();
+}
+
+/* ==============================================================
+   ⑪ INITIALIZATION
+   ============================================================== */
+function initializeDashboard() {
+  loadTheme();
+
+  // Restore last update time if available
+  const saved = localStorage.getItem("kaon_lastUpdate");
+  if (saved) updateLastUpdated(saved);
+
+  // Render competitor links immediately (static)
+  renderCompetitorLinks();
+
+  // Start fetching
+  fetchAllNews();
+}
+
+// Boot
+window.addEventListener("DOMContentLoaded", initializeDashboard);
+</script>
+</body>
+</html>
