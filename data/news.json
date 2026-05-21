@@ -1328,21 +1328,6 @@
       "updatedAt": "2026-05-20T06:55:10.769Z",
       "bookmarkedAt": "2026-05-20T07:46:08.596Z"
     },
-    "https://www.advanced-television.com/2026/05/20/roku-launches-creators-in-us/": {
-      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
-      "title": "Roku launches Creators in US",
-      "url": "https://www.advanced-television.com/2026/05/20/roku-launches-creators-in-us/",
-      "snippet": "Roku has announced the launch of Creators, a new entertainment destination where Roku users can discover and stream creator content on the platform in the US. “With the launch of our new Creators destination, we’re making it effortless to enjoy creator content the way it deserves to be watched: on the big screen, in stunning […]",
-      "source": "Advanced Television",
-      "publishedAt": "2026-05-19 23:53:50",
-      "type": "media",
-      "companies": [],
-      "keywords": [],
-      "category": "Television / Broadband",
-      "createdAt": "2026-05-20T08:33:07.867Z",
-      "updatedAt": "2026-05-20T08:33:07.867Z",
-      "bookmarkedAt": "2026-05-20T08:33:15.647Z"
-    },
     "https://www.linkedin.com/posts/humax-networks_hne2306-plume-opensync-activity-7458367070875934720-EoxB?utm_source=share&utm_medium=member_desktop&rcm=ACoAAC_5zesBEXHEWkiR-6UF1FKpq4jzBRbtB_A": {
       "id": "aHR0cHMlM0ElMkYlMkZ3d3cubGlu",
       "title": "HNE2306 Wi-Fi 7 Router & Extender OpenSync Certification",
@@ -1360,6 +1345,21 @@
       "updatedAt": "2026-05-20T07:45:42.957Z",
       "liStorageId": "li_1779263142957_4n02s",
       "bookmarkedAt": "2026-05-20T08:33:18.669Z"
+    },
+    "https://www.advanced-television.com/2026/05/20/roku-launches-creators-in-us/": {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "Roku launches Creators in US",
+      "url": "https://www.advanced-television.com/2026/05/20/roku-launches-creators-in-us/",
+      "snippet": "Roku has announced the launch of Creators, a new entertainment destination where Roku users can discover and stream creator content on the platform in the US. “With the launch of our new Creators destination, we’re making it effortless to enjoy creator content the way it deserves to be watched: on the big screen, in stunning […]",
+      "source": "Advanced Television",
+      "publishedAt": "2026-05-19 23:53:50",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Television / Broadband",
+      "createdAt": "2026-05-20T08:33:07.867Z",
+      "updatedAt": "2026-05-20T08:33:07.867Z",
+      "bookmarkedAt": "2026-05-21T06:51:44.124Z"
     }
   },
   "categoryOverrides": {
@@ -1370,7 +1370,8 @@
     "https://www.lightreading.com/broadband/fcc-streamlines-broadband-data-collection": "Video",
     "https://www.lightreading.com/broadband/ntca-calls-on-ntia-to-release-bead-performance-tests": "Broadband",
     "https://www.lightreading.com/satellite/sk-telink-brings-starlink-to-five-south-korean-shipping-firms": "Video",
-    "https://www.broadbandtvnews.com/2026/05/20/english-club-tv-group-expands-in-bulgaria/": "Video"
+    "https://www.broadbandtvnews.com/2026/05/20/english-club-tv-group-expands-in-bulgaria/": "Video",
+    "https://www.advanced-television.com/2026/05/21/morrisons-extends-sponsorship-of-prime-videos-clarksons-farm/": "Broadband"
   },
   "typeOverrides": {
     "https://www.advanced-television.com/2026/05/19/research-digital-transactional-video-returns-to-growth/": "industry",
@@ -1383,7 +1384,7 @@
     "https://www.broadbandtvnews.com/2026/05/20/ocilion-adds-dfb-tv-to-iptv-platform/": "competitor",
     "https://www.advanced-television.com/2026/05/21/unacceptable-airs-on-tlc-this-july/": "industry"
   },
-  "lastUpdatedAt": "2026-05-21T06:51:24.554Z",
+  "lastUpdatedAt": "2026-05-21T07:17:29.682Z",
   "monthStart": "2026-05-01",
   "updatedBy": "bale716"
 }
