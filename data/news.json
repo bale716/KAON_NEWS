@@ -1268,6 +1268,20 @@
       "category": "Wireless / Telecom",
       "createdAt": "2026-05-21T00:41:35.195Z",
       "updatedAt": "2026-05-21T00:41:35.195Z"
+    },
+    {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "Morrisons extends sponsorship of Prime Video’s Clarkson’s Farm",
+      "url": "https://www.advanced-television.com/2026/05/21/morrisons-extends-sponsorship-of-prime-videos-clarksons-farm/",
+      "snippet": "Morrisons has announced the extension of its exclusive sponsorship of  Prime Video’s hit series Clarkson’s Farm for a second consecutive year. The fifth season of the series, set at Jeremy Clarkson’s Diddly Squat Farm in Chipping Norton, will launch on Prime Video on June 3rd. The sponsorship further strengthens Morrisons 127-year relationship with British farming […]",
+      "source": "Advanced Television",
+      "publishedAt": "2026-05-21 04:00:37",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Television / Broadband",
+      "createdAt": "2026-05-21T06:08:29.546Z",
+      "updatedAt": "2026-05-21T06:08:29.546Z"
     }
   ],
   "liPosts": [
@@ -1350,13 +1364,26 @@
   },
   "categoryOverrides": {
     "https://www.lightreading.com/ai-machine-learning/chinese-telcos-join-the-ai-token-party": "Broadband",
-    "https://www.broadbandtvnews.com/2026/05/19/atsc-sbtvd-forum-and-tta-sign-next-generation-broadcasting-mou/": "Video"
+    "https://www.broadbandtvnews.com/2026/05/19/atsc-sbtvd-forum-and-tta-sign-next-generation-broadcasting-mou/": "Video",
+    "https://www.broadbandtvnews.com/2026/05/20/channel-4-revenues-top-1bn-as-digital-growth-offsets-ad-pressure/": "Video",
+    "https://www.lightreading.com/cloud/eurobites-now-it-s-telia-s-turn-to-go-sovereign-with-iot": "Video",
+    "https://www.lightreading.com/broadband/fcc-streamlines-broadband-data-collection": "Video",
+    "https://www.lightreading.com/broadband/ntca-calls-on-ntia-to-release-bead-performance-tests": "Broadband",
+    "https://www.lightreading.com/satellite/sk-telink-brings-starlink-to-five-south-korean-shipping-firms": "Video",
+    "https://www.broadbandtvnews.com/2026/05/20/english-club-tv-group-expands-in-bulgaria/": "Video"
   },
   "typeOverrides": {
     "https://www.advanced-television.com/2026/05/19/research-digital-transactional-video-returns-to-growth/": "industry",
-    "https://www.lightreading.com/finance/big-fiber-secures-250m-led-by-stonepeak-credit-la-caisse": "competitor"
+    "https://www.lightreading.com/finance/big-fiber-secures-250m-led-by-stonepeak-credit-la-caisse": "competitor",
+    "https://www.lightreading.com/ai-machine-learning/dt-vodafone-see-collaboration-as-key-on-ai-native-path-to-6g": "competitor",
+    "https://www.rcrwireless.com/20260520/carriers/kddi-ai-strategy": "competitor",
+    "https://www.broadbandtvnews.com/2026/05/20/channel-4-revenues-top-1bn-as-digital-growth-offsets-ad-pressure/": "competitor",
+    "https://www.rcrwireless.com/20260520/carriers/universal-blueprint-snowflake-telcos-ai-revolution": "competitor",
+    "https://www.lightreading.com/broadband/fcc-streamlines-broadband-data-collection": "competitor",
+    "https://www.broadbandtvnews.com/2026/05/20/ocilion-adds-dfb-tv-to-iptv-platform/": "competitor",
+    "https://www.advanced-television.com/2026/05/21/unacceptable-airs-on-tlc-this-july/": "industry"
   },
-  "lastUpdatedAt": "2026-05-21T00:41:48.299Z",
+  "lastUpdatedAt": "2026-05-21T06:08:29.796Z",
   "monthStart": "2026-05-01",
   "updatedBy": "bale716"
 }
