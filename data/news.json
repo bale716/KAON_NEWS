@@ -2000,6 +2000,48 @@
       "category": "Wireless / Telecom",
       "createdAt": "2026-05-28T07:11:20.050Z",
       "updatedAt": "2026-05-28T07:11:20.050Z"
+    },
+    {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "Germany introduces mandatory investment quota for streamers and broadcasters",
+      "url": "https://www.broadbandtvnews.com/2026/05/27/germany-introduces-mandatory-investment-quota-for-streamers-and-broadcasters/",
+      "snippet": "The German government has adopted draft legislation that will require streaming services and TV broadcasters to invest a fixed share of their annual turnover in domestic film production. The bill, […]",
+      "source": "Broadband TV News",
+      "publishedAt": "2026-05-27 18:34:40",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Broadband / TV",
+      "createdAt": "2026-05-28T07:11:24.946Z",
+      "updatedAt": "2026-05-28T07:11:24.946Z"
+    },
+    {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "QVC denied ‘public value’ status in landmark German court ruling",
+      "url": "https://www.broadbandtvnews.com/2026/05/27/qvc-denied-public-value-status-in-landmark-german-court-ruling/",
+      "snippet": "The Higher Administrative Court of North Rhine-Westphalia has ruled that teleshopping broadcasters including QVC are not entitled to inclusion on Germany’s public value list, concluding that such channels do not […]",
+      "source": "Broadband TV News",
+      "publishedAt": "2026-05-27 18:10:43",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Broadband / TV",
+      "createdAt": "2026-05-28T07:11:24.947Z",
+      "updatedAt": "2026-05-28T07:11:24.947Z"
+    },
+    {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "OCUDU Ecosystem Foundation emerges as hub for open source RAN innovation",
+      "url": "https://www.lightreading.com/open-ran/ocudu-ecosystem-foundation-emerges-as-hub-for-open-source-ran-innovation",
+      "snippet": "21 new global member organizations have joined since launch. #pressrelease",
+      "source": "Light Reading",
+      "publishedAt": "2026-05-27 19:48:38",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Network / Broadband",
+      "createdAt": "2026-05-28T07:11:26.206Z",
+      "updatedAt": "2026-05-28T07:11:26.206Z"
     }
   ],
   "liPosts": [
@@ -2123,7 +2165,7 @@
     "https://www.broadbandtvnews.com/2026/05/21/more-than-70-of-uk-homes-now-access-svod/": "competitor",
     "https://www.advanced-television.com/2026/05/21/report-brands-may-be-overlooking-fast-news-channels/": "industry"
   },
-  "lastUpdatedAt": "2026-05-28T07:11:20.245Z",
+  "lastUpdatedAt": "2026-05-28T07:11:27.391Z",
   "monthStart": "2026-05-01",
   "updatedBy": "bale716"
 }
