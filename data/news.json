@@ -2042,6 +2042,20 @@
       "category": "Network / Broadband",
       "createdAt": "2026-05-28T07:11:26.206Z",
       "updatedAt": "2026-05-28T07:11:26.206Z"
+    },
+    {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "White paper: Direct-to-Cell Technology: Enabling Satellite Connectivity for Legacy Devices",
+      "url": "https://www.fierce-network.com/resource/white-paper-direct-cell-technology-enabling-satellite-connectivity-legacy-devices",
+      "snippet": "White paper: Direct-to-Cell Technology: Enabling Satellite Connectivity for Legacy Devices\n\n            Learn how direct-to-cell (DTC) technology enables unmodified LTE smartphones to connect directly to LEO satellites. Learn how DTC addresses Doppler shift, latency, spectrum sharing, and mobility challenges while paving the way toward future 5G NTN and 6G networks.\n      swheeler\nWed, 05/27/2026 ",
+      "source": "Fierce Network",
+      "publishedAt": "2026-05-27 19:04:50",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Telecom / Network",
+      "createdAt": "2026-05-28T07:12:35.297Z",
+      "updatedAt": "2026-05-28T07:12:35.297Z"
     }
   ],
   "liPosts": [
@@ -2165,7 +2179,7 @@
     "https://www.broadbandtvnews.com/2026/05/21/more-than-70-of-uk-homes-now-access-svod/": "competitor",
     "https://www.advanced-television.com/2026/05/21/report-brands-may-be-overlooking-fast-news-channels/": "industry"
   },
-  "lastUpdatedAt": "2026-05-28T07:11:52.896Z",
+  "lastUpdatedAt": "2026-05-28T07:12:37.706Z",
   "monthStart": "2026-05-01",
   "updatedBy": "bale716"
 }
