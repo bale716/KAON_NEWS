@@ -1930,6 +1930,76 @@
       "category": "Telecom / Network",
       "createdAt": "2026-05-26T23:38:39.201Z",
       "updatedAt": "2026-05-26T23:38:39.201Z"
+    },
+    {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "SoftBank launches sovereign AI GPU cloud",
+      "url": "https://www.rcrwireless.com/20260527/ai/softbank-gpu-ai-cloud",
+      "snippet": "The Nvidia-powered service bundles SoftBank’s telecom edge network with central GPU data centers In sum – what we know: SoftBank has announced its “AI Data Center GPU Cloud,” a sovereign AI infrastructure service that pushes the operator further away from…",
+      "source": "RCR Wireless",
+      "publishedAt": "2026-05-27 19:32:59",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Wireless / Telecom",
+      "createdAt": "2026-05-28T07:11:20.050Z",
+      "updatedAt": "2026-05-28T07:11:20.050Z"
+    },
+    {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "5G core growth shifts outside China, Dell’Oro says",
+      "url": "https://www.rcrwireless.com/20260527/5g/5g-core-china-delloro",
+      "snippet": "Dell’Oro said 5G MCN revenue in North America and EMEA expanded 20% year over year during the quarter, continuing momentum that began in 2025 In sum – what to know: Regional divergence – 5G mobile core network revenue grew 20%…",
+      "source": "RCR Wireless",
+      "publishedAt": "2026-05-27 13:39:44",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Wireless / Telecom",
+      "createdAt": "2026-05-28T07:11:20.050Z",
+      "updatedAt": "2026-05-28T07:11:20.050Z"
+    },
+    {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "Wi-Fi 7 in MDUs – what the tech actually delivers (Analyst Angle)",
+      "url": "https://www.rcrwireless.com/20260527/analyst-angle/wi-fi-7-mdus-fellah",
+      "snippet": "More than 80 percent of U.S. rental units are in MDUs that predate modern structured cabling, and new construction accounts for only a fraction of that total each year. For MSPs and property owners, the opportunity is not in new…",
+      "source": "RCR Wireless",
+      "publishedAt": "2026-05-27 10:49:53",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Wireless / Telecom",
+      "createdAt": "2026-05-28T07:11:20.050Z",
+      "updatedAt": "2026-05-28T07:11:20.050Z"
+    },
+    {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "Satellite connectivity is finally bridging the digital divide (Reader Forum)",
+      "url": "https://www.rcrwireless.com/20260527/opinion/satellite-connectivity-digital-divide-oq-technology",
+      "snippet": "As telecom operators embrace D2D satellite connectivity, the industry is moving closer to closing persistent coverage gaps, extending resilient mobile access to remote regions, and ensuring geography no longer determines access to connectivity, safety, or economic opportunity. The announcement that…",
+      "source": "RCR Wireless",
+      "publishedAt": "2026-05-27 10:23:10",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Wireless / Telecom",
+      "createdAt": "2026-05-28T07:11:20.050Z",
+      "updatedAt": "2026-05-28T07:11:20.050Z"
+    },
+    {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cu",
+      "title": "From SD-WAN to 5G core – the network controller is now the target (Reader Forum)",
+      "url": "https://www.rcrwireless.com/20260527/5g/sd-wan-to-5g-core-security",
+      "snippet": "Cisco’s recent SD-WAN vulnerabilities are not isolated flaws but symptoms of a deeper architectural weakness across modern networks. As threat actors increasingly target centralized control-plane systems in enterprise and telecom infrastructure, the industry faces a growing imperative to move beyond…",
+      "source": "RCR Wireless",
+      "publishedAt": "2026-05-27 10:11:07",
+      "type": "media",
+      "companies": [],
+      "keywords": [],
+      "category": "Wireless / Telecom",
+      "createdAt": "2026-05-28T07:11:20.050Z",
+      "updatedAt": "2026-05-28T07:11:20.050Z"
     }
   ],
   "liPosts": [
@@ -2053,7 +2123,7 @@
     "https://www.broadbandtvnews.com/2026/05/21/more-than-70-of-uk-homes-now-access-svod/": "competitor",
     "https://www.advanced-television.com/2026/05/21/report-brands-may-be-overlooking-fast-news-channels/": "industry"
   },
-  "lastUpdatedAt": "2026-05-26T23:38:51.988Z",
+  "lastUpdatedAt": "2026-05-28T07:11:20.245Z",
   "monthStart": "2026-05-01",
   "updatedBy": "bale716"
 }
