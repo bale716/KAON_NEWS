@@ -421,6 +421,23 @@
       "category": "Wireless / Telecom",
       "createdAt": "2026-07-03T01:26:38.165Z",
       "updatedAt": "2026-07-03T01:26:38.165Z"
+    },
+    {
+      "id": "aHR0cHMlM0ElMkYlMkZ3d3cubGlu",
+      "title": "5G FWA F5988 gateway",
+      "url": "https://www.linkedin.com/posts/sagemcom_telenor-5g-wifi7-activity-7476163620788211712-oEmp?utm_source=share&utm_medium=member_desktop&rcm=ACoAAC_5zesBEXHEWkiR-6UF1FKpq4jzBRbtB_A",
+      "snippet": "5G FWA F5988 gateway has received this distinction.",
+      "source": "LinkedIn",
+      "publishedAt": "2026-07-01T00:00:00.000Z",
+      "type": "linkedin",
+      "companies": [
+        "Sagemcom"
+      ],
+      "keywords": [],
+      "category": "LinkedIn",
+      "createdAt": "2026-07-03T01:28:27.602Z",
+      "updatedAt": "2026-07-03T01:28:27.603Z",
+      "liStorageId": "li_1783042107602_0uqc8"
     }
   ],
   "liPosts": [
@@ -434,6 +451,17 @@
       "summary": "HUMAX Networks announced that its Wi-Fi 7 router & extender, hashtag#HNE2306, has successfully achieved Plume OpenSync certification, validating its readiness for commercial deployment in Plume-based environments.",
       "liStorageId": "li_1779263142957_4n02s",
       "createdAt": "2026-05-20T07:45:42.957Z"
+    },
+    {
+      "title": "5G FWA F5988 gateway",
+      "company": "Sagemcom",
+      "category": "LinkedIn",
+      "source": "LinkedIn",
+      "publishedAt": "2026-07-01T00:00:00.000Z",
+      "url": "https://www.linkedin.com/posts/sagemcom_telenor-5g-wifi7-activity-7476163620788211712-oEmp?utm_source=share&utm_medium=member_desktop&rcm=ACoAAC_5zesBEXHEWkiR-6UF1FKpq4jzBRbtB_A",
+      "summary": "5G FWA F5988 gateway has received this distinction.",
+      "liStorageId": "li_1783042107602_0uqc8",
+      "createdAt": "2026-07-03T01:28:27.602Z"
     }
   ],
   "bookmarks": {
@@ -544,7 +572,7 @@
     "https://www.broadbandtvnews.com/2026/05/21/more-than-70-of-uk-homes-now-access-svod/": "competitor",
     "https://www.advanced-television.com/2026/05/21/report-brands-may-be-overlooking-fast-news-channels/": "industry"
   },
-  "lastUpdatedAt": "2026-07-03T01:26:40.317Z",
+  "lastUpdatedAt": "2026-07-03T01:28:45.405Z",
   "monthStart": "2026-07-01",
   "updatedBy": "bale716"
 }
